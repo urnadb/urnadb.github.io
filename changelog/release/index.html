@@ -9,43 +9,63 @@
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="16x16" />
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href="/images/wiredb-org.png" sizes="180x180" />
-<link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>TLS 连接 – UrnaDB Document</title>
-  <meta name="description" content="尽管采用可靠且安全的数据管理方式，并将数据文件保存在主机磁盘中，同时通过限制主机访问权限和静态数据加密来减少潜在的数据泄露风险，这些措施仍然不足以全面保障数据安全。由于 UrnaDB 部署在远程服务器上，业务应用层在访问数据时必须经过网络传输，因此在传输过程中仍存在被截获或篡改的风险。
-UrnaDB 数据库的对外服务层基于 HTTP 协议，因此客户端与服务器之间的数据通信是通过 HTTP 进行的。然而 HTTP 协议在传输过程中采用明文传输方式，意味着数据包在网络上传输时可能会被截获或篡改，从而存在数据泄露的风险，可能导致数据库中的敏感信息被泄露。
-Important
-在设计 UrnaDB 数据库架构时，我已经充分考虑到这一问题，选择基于 HTTP 协议进行数据交换的原因主要有以下几点：首先 HTTP 协议是当前最广泛使用的网络应用层协议，天生支持分布式网络请求处理。任何支持 HTTP 协议的应用程序都可以作为客户端参与通信，目前 HTTP 协议已经发展到 HTTP/2.0 版本，带来了许多性能优化，如多路复用、头部压缩等，进一步提升了效率，此外基于 TLS 协议的 HTTPS 连接可以保障数据传输的安全性，确保网络通信的隐私和完整性。
-UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划在后续版本中添加此功能，目前的 TLS 解决方案是通过 Nginx 反向代理来提供 HTTPS 协议层的保护，具体配置如下：" /><link rel="canonical" href="http://localhost:1313/guide/tls-http/" itemprop="url" />
+<link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>Release 日志 – UrnaDB Document</title>
+  <meta name="description" content="1.1.2 - 2025-04-05 Added 🎉 针对 checkpoint 功能做出改进，以加速崩溃恢复过程中的启动速度，解决 checkpoint 生成过程中突然中断后恢复数据一致性问题。 Fixed 🚄 修复 checkpoint 并发状态同步问题。 🗑️ 清理 checkpoint 中断过程中生成临时文件。 🧲 优化内存分配策略，使用内存池复用高频使用的组建。 ♻️ 修复 checkpoint 生成过程中突然中断数据一致性问题。 ⛰️ 缩小默认单个 region 区域大小为 2GB，减少垃圾回收和 checkpoint 扫描所需的时间。 1.1.1 - 2025-03-25 Added 🎉 添加 Checkpoint 功能，以加速崩溃恢复过程中的启动速度，并确保恢复后的数据一致性。 Fixed ♻️ 更换垃圾回收器状态同步机制。 📄 更换 IP Whitelist 开启方式。 🗜️ 更换数据编码解码为 Msgpack 格式。 🫙 更改原有 List 类型为 Collection 类型。 1.0.1 - 2025-03-08 Added 🎉 添加新的 query/{key} 查询接口，能直接返回 {key} 数据类型、存储的 BSON 数据和剩下的存活时间。 Fixed 🐛 修复索引恢复时排除已经过期的索引 Inode。 🏗️ 更换容器启动方式为 ENTRYPOINT 方式。 ♻️ 更换垃圾回收器调度周期设置方式为 cron。 📜 使用类 CURL 请求的返回 JSON 结构格式更为美观。 1.0.0 - 2025-02-26 🎉 首个 Beta 版本发布，支持 Linux、macOS、Windows 平台，并提供容器镜像。" /><link rel="canonical" href="http://localhost:1313/changelog/release/" itemprop="url" />
 
-<meta property="og:title" content="TLS 连接" />
-<meta property="og:description" content="尽管采用可靠且安全的数据管理方式，并将数据文件保存在主机磁盘中，同时通过限制主机访问权限和静态数据加密来减少潜在的数据泄露风险，这些措施仍然不足以全面保障数据安全。由于 UrnaDB 部署在远程服务器上，业务应用层在访问数据时必须经过网络传输，因此在传输过程中仍存在被截获或篡改的风险。
-UrnaDB 数据库的对外服务层基于 HTTP 协议，因此客户端与服务器之间的数据通信是通过 HTTP 进行的。然而 HTTP 协议在传输过程中采用明文传输方式，意味着数据包在网络上传输时可能会被截获或篡改，从而存在数据泄露的风险，可能导致数据库中的敏感信息被泄露。
+<meta property="og:title" content="Release 日志" />
+<meta property="og:description" content="1.1.2 - 2025-04-05
+    Added
+    
+🎉 针对 checkpoint 功能做出改进，以加速崩溃恢复过程中的启动速度，解决 checkpoint 生成过程中突然中断后恢复数据一致性问题。
 
-  Important
+Fixed
+    
+🚄 修复 checkpoint 并发状态同步问题。
+🗑️ 清理 checkpoint 中断过程中生成临时文件。
+🧲 优化内存分配策略，使用内存池复用高频使用的组建。
+♻️ 修复 checkpoint 生成过程中突然中断数据一致性问题。
+⛰️ 缩小默认单个 region 区域大小为 2GB，减少垃圾回收和 checkpoint 扫描所需的时间。
 
-  
-    在设计 UrnaDB 数据库架构时，我已经充分考虑到这一问题，选择基于 HTTP 协议进行数据交换的原因主要有以下几点：首先 HTTP 协议是当前最广泛使用的网络应用层协议，天生支持分布式网络请求处理。任何支持 HTTP 协议的应用程序都可以作为客户端参与通信，目前 HTTP 协议已经发展到 HTTP/2.0 版本，带来了许多性能优化，如多路复用、头部压缩等，进一步提升了效率，此外基于 TLS 协议的 HTTPS 连接可以保障数据传输的安全性，确保网络通信的隐私和完整性。
-  
 
-UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划在后续版本中添加此功能，目前的 TLS 解决方案是通过 Nginx 反向代理来提供 HTTPS 协议层的保护，具体配置如下：" />
+1.1.1 - 2025-03-25
+    Added
+    
+🎉 添加 Checkpoint 功能，以加速崩溃恢复过程中的启动速度，并确保恢复后的数据一致性。
+
+Fixed
+    
+♻️ 更换垃圾回收器状态同步机制。
+📄 更换 IP Whitelist 开启方式。
+🗜️ 更换数据编码解码为 Msgpack 格式。
+🫙 更改原有 List 类型为 Collection 类型。
+
+
+1.0.1 - 2025-03-08
+    Added
+    
+🎉 添加新的 query/{key} 查询接口，能直接返回 {key} 数据类型、存储的 BSON 数据和剩下的存活时间。
+
+Fixed
+    
+🐛 修复索引恢复时排除已经过期的索引 Inode。
+🏗️ 更换容器启动方式为 ENTRYPOINT 方式。
+♻️ 更换垃圾回收器调度周期设置方式为 cron。
+📜 使用类 CURL 请求的返回 JSON 结构格式更为美观。
+
+
+1.0.0 - 2025-02-26
+    🎉 首个 Beta 版本发布，支持 Linux、macOS、Windows 平台，并提供容器镜像。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:1313/guide/tls-http/" /><meta property="article:section" content="guide" />
+<meta property="og:url" content="http://localhost:1313/changelog/release/" /><meta property="article:section" content="changelog" />
 
 
 
-  <meta itemprop="name" content="TLS 连接">
-  <meta itemprop="description" content="尽管采用可靠且安全的数据管理方式，并将数据文件保存在主机磁盘中，同时通过限制主机访问权限和静态数据加密来减少潜在的数据泄露风险，这些措施仍然不足以全面保障数据安全。由于 UrnaDB 部署在远程服务器上，业务应用层在访问数据时必须经过网络传输，因此在传输过程中仍存在被截获或篡改的风险。
-UrnaDB 数据库的对外服务层基于 HTTP 协议，因此客户端与服务器之间的数据通信是通过 HTTP 进行的。然而 HTTP 协议在传输过程中采用明文传输方式，意味着数据包在网络上传输时可能会被截获或篡改，从而存在数据泄露的风险，可能导致数据库中的敏感信息被泄露。
-Important
-在设计 UrnaDB 数据库架构时，我已经充分考虑到这一问题，选择基于 HTTP 协议进行数据交换的原因主要有以下几点：首先 HTTP 协议是当前最广泛使用的网络应用层协议，天生支持分布式网络请求处理。任何支持 HTTP 协议的应用程序都可以作为客户端参与通信，目前 HTTP 协议已经发展到 HTTP/2.0 版本，带来了许多性能优化，如多路复用、头部压缩等，进一步提升了效率，此外基于 TLS 协议的 HTTPS 连接可以保障数据传输的安全性，确保网络通信的隐私和完整性。
-UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划在后续版本中添加此功能，目前的 TLS 解决方案是通过 Nginx 反向代理来提供 HTTPS 协议层的保护，具体配置如下：">
-  <meta itemprop="wordCount" content="193">
+  <meta itemprop="name" content="Release 日志">
+  <meta itemprop="description" content="1.1.2 - 2025-04-05 Added 🎉 针对 checkpoint 功能做出改进，以加速崩溃恢复过程中的启动速度，解决 checkpoint 生成过程中突然中断后恢复数据一致性问题。 Fixed 🚄 修复 checkpoint 并发状态同步问题。 🗑️ 清理 checkpoint 中断过程中生成临时文件。 🧲 优化内存分配策略，使用内存池复用高频使用的组建。 ♻️ 修复 checkpoint 生成过程中突然中断数据一致性问题。 ⛰️ 缩小默认单个 region 区域大小为 2GB，减少垃圾回收和 checkpoint 扫描所需的时间。 1.1.1 - 2025-03-25 Added 🎉 添加 Checkpoint 功能，以加速崩溃恢复过程中的启动速度，并确保恢复后的数据一致性。 Fixed ♻️ 更换垃圾回收器状态同步机制。 📄 更换 IP Whitelist 开启方式。 🗜️ 更换数据编码解码为 Msgpack 格式。 🫙 更改原有 List 类型为 Collection 类型。 1.0.1 - 2025-03-08 Added 🎉 添加新的 query/{key} 查询接口，能直接返回 {key} 数据类型、存储的 BSON 数据和剩下的存活时间。 Fixed 🐛 修复索引恢复时排除已经过期的索引 Inode。 🏗️ 更换容器启动方式为 ENTRYPOINT 方式。 ♻️ 更换垃圾回收器调度周期设置方式为 cron。 📜 使用类 CURL 请求的返回 JSON 结构格式更为美观。 1.0.0 - 2025-02-26 🎉 首个 Beta 版本发布，支持 Linux、macOS、Windows 平台，并提供容器镜像。">
+  <meta itemprop="wordCount" content="108">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="TLS 连接">
-  <meta name="twitter:description" content="尽管采用可靠且安全的数据管理方式，并将数据文件保存在主机磁盘中，同时通过限制主机访问权限和静态数据加密来减少潜在的数据泄露风险，这些措施仍然不足以全面保障数据安全。由于 UrnaDB 部署在远程服务器上，业务应用层在访问数据时必须经过网络传输，因此在传输过程中仍存在被截获或篡改的风险。
-UrnaDB 数据库的对外服务层基于 HTTP 协议，因此客户端与服务器之间的数据通信是通过 HTTP 进行的。然而 HTTP 协议在传输过程中采用明文传输方式，意味着数据包在网络上传输时可能会被截获或篡改，从而存在数据泄露的风险，可能导致数据库中的敏感信息被泄露。
-Important
-在设计 UrnaDB 数据库架构时，我已经充分考虑到这一问题，选择基于 HTTP 协议进行数据交换的原因主要有以下几点：首先 HTTP 协议是当前最广泛使用的网络应用层协议，天生支持分布式网络请求处理。任何支持 HTTP 协议的应用程序都可以作为客户端参与通信，目前 HTTP 协议已经发展到 HTTP/2.0 版本，带来了许多性能优化，如多路复用、头部压缩等，进一步提升了效率，此外基于 TLS 协议的 HTTPS 连接可以保障数据传输的安全性，确保网络通信的隐私和完整性。
-UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划在后续版本中添加此功能，目前的 TLS 解决方案是通过 Nginx 反向代理来提供 HTTPS 协议层的保护，具体配置如下：">
+  <meta name="twitter:title" content="Release 日志">
+  <meta name="twitter:description" content="1.1.2 - 2025-04-05 Added 🎉 针对 checkpoint 功能做出改进，以加速崩溃恢复过程中的启动速度，解决 checkpoint 生成过程中突然中断后恢复数据一致性问题。 Fixed 🚄 修复 checkpoint 并发状态同步问题。 🗑️ 清理 checkpoint 中断过程中生成临时文件。 🧲 优化内存分配策略，使用内存池复用高频使用的组建。 ♻️ 修复 checkpoint 生成过程中突然中断数据一致性问题。 ⛰️ 缩小默认单个 region 区域大小为 2GB，减少垃圾回收和 checkpoint 扫描所需的时间。 1.1.1 - 2025-03-25 Added 🎉 添加 Checkpoint 功能，以加速崩溃恢复过程中的启动速度，并确保恢复后的数据一致性。 Fixed ♻️ 更换垃圾回收器状态同步机制。 📄 更换 IP Whitelist 开启方式。 🗜️ 更换数据编码解码为 Msgpack 格式。 🫙 更改原有 List 类型为 Collection 类型。 1.0.1 - 2025-03-08 Added 🎉 添加新的 query/{key} 查询接口，能直接返回 {key} 数据类型、存储的 BSON 数据和剩下的存活时间。 Fixed 🐛 修复索引恢复时排除已经过期的索引 Inode。 🏗️ 更换容器启动方式为 ENTRYPOINT 方式。 ♻️ 更换垃圾回收器调度周期设置方式为 cron。 📜 使用类 CURL 请求的返回 JSON 结构格式更为美观。 1.0.0 - 2025-02-26 🎉 首个 Beta 版本发布，支持 Linux、macOS、Windows 平台，并提供容器镜像。">
 
     <link href="/css/compiled/main.css" rel="stylesheet" />
 
@@ -215,14 +235,13 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
   >数据管理
     </a>
               
-            </li><li class="hx-flex hx-flex-col open"><a
+            </li><li class="hx-flex hx-flex-col "><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
-      sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
+      hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
     href="/guide/tls-http/"
     
   >TLS 连接
     </a>
-  
               
             </li><li class="hx-flex hx-flex-col "><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
@@ -260,7 +279,7 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
               
             </li></ul>
       </div></li>
-          <li class=""><a
+          <li class="open"><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
       hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
     href="/changelog/"
@@ -276,13 +295,40 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
   >SDK 日志
     </a>
               
-            </li><li class="hx-flex hx-flex-col "><a
+            </li><li class="hx-flex hx-flex-col open"><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
-      hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
+      sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
     href="/changelog/release/"
     
   >Release 日志
     </a>
+  
+    <ul class='hx-flex hx-flex-col hx-gap-1 hx-relative before:hx-absolute before:hx-inset-y-1 before:hx-w-px before:hx-bg-gray-200 before:hx-content-[""] dark:before:hx-bg-neutral-800 ltr:hx-pl-3 ltr:before:hx-left-0 rtl:hx-pr-3 rtl:before:hx-right-0 ltr:hx-ml-3 rtl:hx-mr-3'><li>
+              <a
+                href="#112---2025-04-05"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >1.1.2 - 2025-04-05</a>
+            </li>
+          <li>
+              <a
+                href="#111---2025-03-25"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >1.1.1 - 2025-03-25</a>
+            </li>
+          <li>
+              <a
+                href="#101---2025-03-08"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >1.0.1 - 2025-03-08</a>
+            </li>
+          <li>
+              <a
+                href="#100---2025-02-26"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >1.0.0 - 2025-02-26</a>
+            </li>
+          </ul>
+  
               
             </li></ul>
       </div></li>
@@ -352,9 +398,9 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
   >数据管理
     </a>
               
-            </li><li class="hx-flex hx-flex-col open"><a
+            </li><li class="hx-flex hx-flex-col "><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
-      sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
+      hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
     href="/guide/tls-http/"
     
   >TLS 连接
@@ -396,7 +442,7 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
               
             </li></ul>
       </div></li>
-          <li class=""><a
+          <li class="open"><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
       hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
     href="/changelog/"
@@ -412,9 +458,9 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
   >SDK 日志
     </a>
               
-            </li><li class="hx-flex hx-flex-col "><a
+            </li><li class="hx-flex hx-flex-col open"><a
     class="hx-flex hx-items-center hx-justify-between hx-gap-2 hx-cursor-pointer hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] [word-break:break-word]
-      hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 contrast-more:hx-border contrast-more:hx-border-transparent contrast-more:hx-text-gray-900 contrast-more:hover:hx-border-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:dark:hx-text-gray-50 contrast-more:dark:hover:hx-border-gray-50"
+      sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
     href="/changelog/release/"
     
   >Release 日志
@@ -446,8 +492,52 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
 </div></div></aside>
     
 <nav class="hextra-toc hx-order-last hx-hidden hx-w-64 hx-shrink-0 xl:hx-block print:hx-hidden hx-px-4" aria-label="table of contents">
-    <div class="hextra-scrollbar hx-sticky hx-top-16 hx-overflow-y-auto hx-pr-4 hx-pt-6 hx-text-sm [hyphens:auto] hx-max-h-[calc(100vh-var(--navbar-height)-env(safe-area-inset-bottom))] ltr:hx--mr-4 rtl:hx--ml-4">
-      <div class=" hx-sticky hx-bottom-0 hx-flex hx-flex-col hx-items-start hx-gap-2 hx-pb-8 dark:hx-border-neutral-800 contrast-more:hx-border-t contrast-more:hx-border-neutral-400 contrast-more:hx-shadow-none contrast-more:dark:hx-border-neutral-400">
+    <div class="hextra-scrollbar hx-sticky hx-top-16 hx-overflow-y-auto hx-pr-4 hx-pt-6 hx-text-sm [hyphens:auto] hx-max-h-[calc(100vh-var(--navbar-height)-env(safe-area-inset-bottom))] ltr:hx--mr-4 rtl:hx--ml-4"><p class="hx-mb-4 hx-font-semibold hx-tracking-tight">On this page</p><ul>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#112---2025-04-05">1.1.2 - 2025-04-05
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#added">Added
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#fixed">Fixed
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#111---2025-03-25">1.1.1 - 2025-03-25
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#added-1">Added
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#fixed-1">Fixed
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#101---2025-03-08">1.0.1 - 2025-03-08
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#added-2">Added
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#fixed-2">Fixed
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#100---2025-02-26">1.0.0 - 2025-02-26
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="ltr:hx-pl-4 rtl:hx-pr-4 hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#added-3">Added
+        </a>
+      </li></ul>
+      <div class="hx-mt-8 hx-border-t hx-bg-white hx-pt-8 hx-shadow-[0_-12px_16px_white] dark:hx-bg-dark dark:hx-shadow-[0_-12px_16px_#111] hx-sticky hx-bottom-0 hx-flex hx-flex-col hx-items-start hx-gap-2 hx-pb-8 dark:hx-border-neutral-800 contrast-more:hx-border-t contrast-more:hx-border-neutral-400 contrast-more:hx-shadow-none contrast-more:dark:hx-border-neutral-400">
         <button aria-hidden="true" id="backToTop" onClick="scrollUp();" class="hx-transition-all hx-duration-75 hx-opacity-0 hx-text-xs hx-font-medium hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-100 contrast-more:hx-text-gray-800 contrast-more:dark:hx-text-gray-50">
           <span>Scroll to top</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hx-inline ltr:hx-ml-1 rtl:hx-mr-1 hx-h-3.5 hx-w-3.5 hx-border hx-rounded-full hx-border-gray-500 hover:hx-border-gray-900 dark:hx-border-gray-400 dark:hover:hx-border-gray-100 contrast-more:hx-border-gray-800 contrast-more:dark:hx-border-gray-50">
@@ -464,86 +554,71 @@ UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划
         
   <div class="hx-mt-1.5 hx-flex hx-items-center hx-gap-1 hx-overflow-hidden hx-text-sm hx-text-gray-500 dark:hx-text-gray-400 contrast-more:hx-text-current">
         <div class="hx-whitespace-nowrap hx-transition-colors hx-min-w-[24px] hx-overflow-hidden hx-text-ellipsis hover:hx-text-gray-900 dark:hover:hx-text-gray-100">
-          <a href="/guide/">使用指南</a>
-        </div><svg class="hx-w-3.5 hx-shrink-0 rtl:-hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg><div class="hx-whitespace-nowrap hx-transition-colors hx-font-medium hx-text-gray-700 contrast-more:hx-font-bold contrast-more:hx-text-current dark:hx-text-gray-100 contrast-more:dark:hx-text-current">TLS 连接</div>
+          <a href="/changelog/">更新日志</a>
+        </div><svg class="hx-w-3.5 hx-shrink-0 rtl:-hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg><div class="hx-whitespace-nowrap hx-transition-colors hx-font-medium hx-text-gray-700 contrast-more:hx-font-bold contrast-more:hx-text-current dark:hx-text-gray-100 contrast-more:dark:hx-text-current">Release 日志</div>
   </div>
 
         <div class="content">
-          <h1>TLS 连接</h1>
-          <p>尽管采用可靠且安全的数据管理方式，并将数据文件保存在主机磁盘中，同时通过限制主机访问权限和静态数据加密来减少潜在的数据泄露风险，这些措施仍然不足以全面保障数据安全。由于 UrnaDB 部署在远程服务器上，业务应用层在访问数据时必须经过网络传输，因此在传输过程中仍存在被截获或篡改的风险。</p>
-<p>UrnaDB 数据库的对外服务层基于 HTTP 协议，因此客户端与服务器之间的数据通信是通过 HTTP 进行的。然而 HTTP 协议在传输过程中采用明文传输方式，意味着数据包在网络上传输时可能会被截获或篡改，从而存在数据泄露的风险，可能导致数据库中的敏感信息被泄露。</p>
-<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
-  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
-
-  <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>在设计 UrnaDB 数据库架构时，我已经充分考虑到这一问题，选择基于 HTTP 协议进行数据交换的原因主要有以下几点：首先 HTTP 协议是当前最广泛使用的网络应用层协议，天生支持分布式网络请求处理。任何支持 HTTP 协议的应用程序都可以作为客户端参与通信，目前 HTTP 协议已经发展到 HTTP/2.0 版本，带来了许多性能优化，如多路复用、头部压缩等，进一步提升了效率，此外基于 TLS 协议的 HTTPS 连接可以保障数据传输的安全性，确保网络通信的隐私和完整性。</p></div>
-  </div>
-</div>
-<p>UrnaDB 内置的 HTTP Server 当前不支持基于 TLS 的 HTTPS 协议，计划在后续版本中添加此功能，目前的 TLS 解决方案是通过 Nginx 反向代理来提供 HTTPS 协议层的保护，具体配置如下：</p>
-<div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
-
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-nginx" data-lang="nginx"><span style="display:flex;"><span><span style="color:#75715e"># HTTP 配置（监听 80 端口）
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">server</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">listen</span> <span style="color:#ae81ff">80</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">server_name</span> <span style="color:#e6db74">your-domain.com</span>;  <span style="color:#75715e"># 替换为你的域名
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 强制将所有 HTTP 请求重定向到 HTTPS
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">return</span> <span style="color:#ae81ff">301</span> <span style="color:#e6db74">https://</span>$host$request_uri;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># HTTPS 配置（监听 443 端口）
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">server</span> {
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">listen</span> <span style="color:#ae81ff">443</span> <span style="color:#e6db74">ssl</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">server_name</span> <span style="color:#e6db74">your-domain.com</span>;  <span style="color:#75715e"># 替换为你的域名
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssl_certificate</span> <span style="color:#e6db74">/etc/nginx/ssl/ssl.crt</span>;       <span style="color:#75715e"># SSL 证书路径
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">ssl_certificate_key</span> <span style="color:#e6db74">/etc/nginx/ssl/ssl.key</span>;   <span style="color:#75715e"># SSL 密钥路径
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">ssl_protocols</span> <span style="color:#e6db74">TLSv1.2</span> <span style="color:#e6db74">TLSv1.3</span>;  <span style="color:#75715e"># 推荐使用 TLS 1.2 和 1.3
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">ssl_ciphers</span> <span style="color:#e6db74">&#39;ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256&#39;</span>;  <span style="color:#75715e"># 优化的密码套件
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">ssl_prefer_server_ciphers</span> <span style="color:#66d9ef">on</span>;  <span style="color:#75715e"># 优先使用服务器配置的密码套件
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 启用 HSTS（HTTP 严格传输安全）
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#f92672">add_header</span> <span style="color:#e6db74">Strict-Transport-Security</span> <span style="color:#e6db74">&#34;max-age=31536000</span>; <span style="color:#f92672">includeSubDomains&#34;</span> <span style="color:#e6db74">always</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">location</span> <span style="color:#e6db74">/</span> {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">proxy_pass</span> <span style="color:#e6db74">http://localhost:2668</span>;  <span style="color:#75715e"># 将请求代理到 HTTP 服务（例如，本地 8080 端口）
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_set_header</span> <span style="color:#e6db74">Host</span> $host;       <span style="color:#75715e"># 保留原始 Host 头
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_set_header</span> <span style="color:#e6db74">X-Real-IP</span> $remote_addr;  <span style="color:#75715e"># 设置客户端真实 IP
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_set_header</span> <span style="color:#e6db74">X-Forwarded-For</span> $proxy_add_x_forwarded_for;  <span style="color:#75715e"># 设置代理链路的客户端 IP
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_set_header</span> <span style="color:#e6db74">X-Forwarded-Proto</span> $scheme;  <span style="color:#75715e"># 保留协议（http 或 https）
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_set_header</span> <span style="color:#e6db74">X-Forwarded-Port</span> <span style="color:#ae81ff">443</span>;  <span style="color:#75715e"># 设置代理的端口
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#f92672">proxy_redirect</span> <span style="color:#66d9ef">off</span>;  <span style="color:#75715e"># 关闭重定向
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
-  <button
-    class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
-    title="Copy code"
-  >
-    <div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4"></div>
-    <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
-  </button>
-</div>
-</div>
-<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
-  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Tip</p>
-
-  <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>理论上任何支持反向代理和 TLS/TCP 网络协议的软件都可以作为 UrnaDB 的安全代理层，例如通用的 TLS/SSL 隧道工具 <a href="https://www.stunnel.org" target="_blank" rel="noopener">Stunnel</a> ，Stunnel 可以为任意基于 TCP 的客户端和服务器程序提供加密通信功能，因此 Stunnel 也可以充当 UrnaDB 的 HTTP 通信协议安全代理层。要启用 TLS/HTTPS 网络通信，必须先配置 TLS（Transport Layer Security）安全数字证书。TLS 证书基于计算机密码学原理，这里不作详细展开，如需申请 TLS 证书，可以使用 <a href="https://www.acme.sh" target="_blank" rel="noopener">ACME.sh</a> 脚本工具进行申请和配置。</p></div>
-  </div>
-</div>
+          <h1>Release 日志</h1>
+          <h2>1.1.2 - 2025-04-05<span class="hx-absolute -hx-mt-20" id="112---2025-04-05"></span>
+    <a href="#112---2025-04-05" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h3>Added<span class="hx-absolute -hx-mt-20" id="added"></span>
+    <a href="#added" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>🎉 针对 checkpoint 功能做出改进，以加速崩溃恢复过程中的启动速度，解决 checkpoint 生成过程中突然中断后恢复数据一致性问题。</li>
+</ul>
+<h3>Fixed<span class="hx-absolute -hx-mt-20" id="fixed"></span>
+    <a href="#fixed" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>🚄 修复 <code>checkpoint</code> 并发状态同步问题。</li>
+<li>🗑️ 清理 <code>checkpoint</code> 中断过程中生成临时文件。</li>
+<li>🧲 优化内存分配策略，使用内存池复用高频使用的组建。</li>
+<li>♻️ 修复 <code>checkpoint</code> 生成过程中突然中断数据一致性问题。</li>
+<li>⛰️ 缩小默认单个 <code>region</code> 区域大小为 2GB，减少垃圾回收和 <code>checkpoint</code> 扫描所需的时间。</li>
+</ul>
+<hr>
+<h2>1.1.1 - 2025-03-25<span class="hx-absolute -hx-mt-20" id="111---2025-03-25"></span>
+    <a href="#111---2025-03-25" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h3>Added<span class="hx-absolute -hx-mt-20" id="added-1"></span>
+    <a href="#added-1" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>🎉 添加 Checkpoint 功能，以加速崩溃恢复过程中的启动速度，并确保恢复后的数据一致性。</li>
+</ul>
+<h3>Fixed<span class="hx-absolute -hx-mt-20" id="fixed-1"></span>
+    <a href="#fixed-1" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>♻️ 更换垃圾回收器状态同步机制。</li>
+<li>📄 更换 <code>IP Whitelist</code> 开启方式。</li>
+<li>🗜️ 更换数据编码解码为 <code>Msgpack</code> 格式。</li>
+<li>🫙 更改原有 <code>List</code> 类型为 <code>Collection</code> 类型。</li>
+</ul>
+<hr>
+<h2>1.0.1 - 2025-03-08<span class="hx-absolute -hx-mt-20" id="101---2025-03-08"></span>
+    <a href="#101---2025-03-08" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h3>Added<span class="hx-absolute -hx-mt-20" id="added-2"></span>
+    <a href="#added-2" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>🎉 添加新的 <code>query/{key}</code> 查询接口，能直接返回 <code>{key}</code> 数据类型、存储的 BSON 数据和剩下的存活时间。</li>
+</ul>
+<h3>Fixed<span class="hx-absolute -hx-mt-20" id="fixed-2"></span>
+    <a href="#fixed-2" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>🐛 修复索引恢复时排除已经过期的索引 <code>Inode</code>。</li>
+<li>🏗️ 更换容器启动方式为 <code>ENTRYPOINT</code> 方式。</li>
+<li>♻️ 更换垃圾回收器调度周期设置方式为 <code>cron</code>。</li>
+<li>📜 使用类 CURL 请求的返回 JSON 结构格式更为美观。</li>
+</ul>
+<hr>
+<h2>1.0.0 - 2025-02-26<span class="hx-absolute -hx-mt-20" id="100---2025-02-26"></span>
+    <a href="#100---2025-02-26" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>🎉 <strong>首个 Beta 版本发布</strong>，支持 <code>Linux</code>、<code>macOS</code>、<code>Windows</code> 平台，并提供容器镜像。</p>
+<h3>Added<span class="hx-absolute -hx-mt-20" id="added-3"></span>
+    <a href="#added-3" class="subheading-anchor" aria-label="Permalink for this section"></a></h3><ul>
+<li>支持多种内置的数据结构。</li>
+<li>支持数据安全 IP 白名单访问功能。</li>
+<li>提供高吞吐量、低延迟、高效批量数据写入。</li>
+<li>支持磁盘数据存储和磁盘垃圾数据回收。</li>
+<li>支持磁盘数据静态加密和静态数据压缩。</li>
+<li>通过基于 RESTful API 协议操作数据。</li>
+</ul>
 
         </div>
         <div class="hx-mt-16"></div>
         <div class="hx-mb-8 hx-flex hx-items-center hx-border-t hx-pt-8 dark:hx-border-neutral-800 contrast-more:hx-border-neutral-400 dark:contrast-more:hx-border-neutral-400 print:hx-hidden"><a
-        href="/guide/data/"
-        title="数据管理"
+        href="/changelog/sdk-update/"
+        title="SDK 日志"
         class="hx-flex hx-max-w-[50%] hx-items-center hx-gap-1 hx-py-4 hx-text-base hx-font-medium hx-text-gray-600 hx-transition-colors [word-break:break-word] hover:hx-text-primary-600 dark:hx-text-gray-300 md:hx-text-lg ltr:hx-pr-4 rtl:hx-pl-4"
-      ><svg class="hx-inline hx-h-5 hx-shrink-0 ltr:hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>数据管理</a><a
-        href="/guide/operations/"
-        title="API 交互"
-        class="hx-flex hx-max-w-[50%] hx-items-center hx-gap-1 hx-py-4 hx-text-base hx-font-medium hx-text-gray-600 hx-transition-colors [word-break:break-word] hover:hx-text-primary-600 dark:hx-text-gray-300 md:hx-text-lg ltr:hx-ml-auto ltr:hx-pl-4 ltr:hx-text-right rtl:hx-mr-auto rtl:hx-pr-4 rtl:hx-text-left"
-      >API 交互<svg class="hx-inline hx-h-5 hx-shrink-0 rtl:-hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg></a></div>
+      ><svg class="hx-inline hx-h-5 hx-shrink-0 ltr:hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>SDK 日志</a></div>
         
       </main>
     </article>
