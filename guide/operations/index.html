@@ -37,7 +37,7 @@ Important
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 📈 Table 命名空间 Tip">
-  <meta itemprop="wordCount" content="1021">
+  <meta itemprop="wordCount" content="1069">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API 交互">
   <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
@@ -561,9 +561,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table created successfully.&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table created successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -584,12 +582,12 @@ Important
 <p>例如在创建 <strong>users</strong> 时通过 <code>ttl</code> 字段来指定它的生命周期为 1800 秒，在 1800 秒之后会被垃圾回收器主动删除，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT http://192.168.31.221:2668/tables/users <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: 73suyb7iNeZsmqhvaxgEn7Ug2&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;ttl&#34;: 1800
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;ttl&#34;: 1800
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -640,21 +638,40 @@ Important
 <p>向 <strong>users</strong> 命名空间中插入一条数据记录，这条操作类似于关系数据库 SQL 中的 <code>INSERT ... INTO ... VALUES ...</code> 语句，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST http://192.168.31.221:2668/tables/users/rows <span style="color:#ae81ff">\ </span>
-</span></span><span style="display:flex;"><span>  -H <span style="color:#e6db74">&#34;Auth-Token: ex224JWgK5H6sKhpNk5ZbWKzM&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/tables/users/rows&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;rows&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;name&#34;: &#34;Leon Ding&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;age&#34;: 25,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;active&#34;: true,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;score&#34;: 95.5,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;tags&#34;: [&#34;admin&#34;, &#34;user&#34;],
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;meta&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;editor&#34;: &#34;system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;rows&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;name&#34;: &#34;Leon Ding&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;age&#34;: 25,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;active&#34;: true,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;score&#34;: 95.5,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;tags&#34;: [&#34;admin&#34;, &#34;user&#34;],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;meta&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;editor&#34;: &#34;system&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+  <button
+    class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+    title="Copy code"
+  >
+    <div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4"></div>
+    <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
+  </button>
+</div>
+</div>
+<p>上面命令会执行成功之后会返回对应记录的主键 <code>t_id</code> 字段，HTTP 会响应返回 JSON 格式的内容如下：</p>
+<div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table rows insert successfully&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;t_id&#34;</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -667,7 +684,7 @@ Important
 <p>从 <strong>users</strong> 的命名空间中查询所有的数据记录，类似于关系数据库 SQL 中的 <code>SELECT * FROM ...</code> 语句，也类似于其他文档型数据库 MongoDB 中的 <code>findAll</code> 操作，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET http://192.168.31.221:2668/tables/users  <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: 73suyb7iNeZsmqhvaxgEn7Ug2&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -683,21 +700,20 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table queried successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;table&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;1&#34;</span>: {
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;active&#34;</span>: <span style="color:#66d9ef">true</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;age&#34;</span>: <span style="color:#ae81ff">25</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;meta&#34;</span>: {
-</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;editor&#34;</span>: <span style="color:#e6db74">&#34;system&#34;</span>
-</span></span><span style="display:flex;"><span>                },
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;score&#34;</span>: <span style="color:#ae81ff">95.5</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;tags&#34;</span>: [
-</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;admin&#34;</span>,
-</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;user&#34;</span>
-</span></span><span style="display:flex;"><span>                ]
-</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;1&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;active&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;age&#34;</span>: <span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;meta&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;editor&#34;</span>: <span style="color:#e6db74">&#34;system&#34;</span>
+</span></span><span style="display:flex;"><span>            },
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;score&#34;</span>: <span style="color:#ae81ff">95.5</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;tags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;admin&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
@@ -713,14 +729,14 @@ Important
 <p>从名为 <strong>users</strong> 的命名空间中查询一条记录，类似于关系数据库 SQL 中的 <code>SELECT * FROM ... WHERE ...</code> 的语句，查询条件是表中 <strong>name</strong> 字段的值为 <strong>Leon Ding</strong> 的记录，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span> curl -X GET http://192.168.31.221:2668/tables/users/rows  <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users/rows&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: ex224JWgK5H6sKhpNk5ZbWKzM&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;wheres&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;name&#34;: &#34;Leon Ding&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;wheres&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;name&#34;: &#34;Leon Ding&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -735,23 +751,22 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;rows&#34;</span>: [
-</span></span><span style="display:flex;"><span>            {
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;active&#34;</span>: <span style="color:#66d9ef">true</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;age&#34;</span>: <span style="color:#ae81ff">25</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;meta&#34;</span>: {
-</span></span><span style="display:flex;"><span>                    <span style="color:#f92672">&#34;editor&#34;</span>: <span style="color:#e6db74">&#34;system&#34;</span>
-</span></span><span style="display:flex;"><span>                },
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;score&#34;</span>: <span style="color:#ae81ff">95.5</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;tags&#34;</span>: [
-</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;admin&#34;</span>,
-</span></span><span style="display:flex;"><span>                    <span style="color:#e6db74">&#34;user&#34;</span>
-</span></span><span style="display:flex;"><span>                ]
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table queried rows successfully&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;active&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;age&#34;</span>: <span style="color:#ae81ff">25</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;meta&#34;</span>: {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&#34;editor&#34;</span>: <span style="color:#e6db74">&#34;system&#34;</span>
 </span></span><span style="display:flex;"><span>            },
-</span></span><span style="display:flex;"><span>        ]
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;name&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;score&#34;</span>: <span style="color:#ae81ff">95.5</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;tags&#34;</span>: [
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;admin&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;user&#34;</span>
+</span></span><span style="display:flex;"><span>            ]
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    ]
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -765,22 +780,22 @@ Important
 <p>根据指定的筛选条件，对 <strong>users</strong> 命名空间中的数据记录进行部分字段的内容更新操作，这个操作类似于关系数据库 SQL 中的 <code>UPDATE ... SET ... WHERE ... </code>语句，代码示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PATCH http://192.168.31.221:2668/tables/users  <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PATCH <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: ex224JWgK5H6sKhpNk5ZbWKzM&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;wheres&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;name&#34;: &#34;Leon Ding&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;active&#34;: true
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  },
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;sets&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;age&#34;: 26,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;name&#34;: &#34;Leon&#34;,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;meta&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;editor&#34;: &#34;system&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;wheres&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;name&#34;: &#34;Leon Ding&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;active&#34;: true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;sets&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;age&#34;: 26,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;name&#34;: &#34;Leon&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;meta&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        &#34;editor&#34;: &#34;system&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      }
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -795,9 +810,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table rows updated successfully.&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table rows patched successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -811,14 +824,14 @@ Important
 <p>对 <strong>users</strong> 命名空间中已有的数据记录执行条件删除操作，类似于关系数据库 SQL 中的 <code>DELETE FROM ... WHERE ...</code> 的语句，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE  http://192.168.31.221:2668/tables/users/rows  <span style="color:#ae81ff">\ </span>
-</span></span><span style="display:flex;"><span>  -H <span style="color:#e6db74">&#34;Auth-Token: NjqwUvtNP6XQGeABhgwXIDcNw&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users/rows&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: NjqwUvtNP6XQGeABhgwXIDcNw&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>-d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;wheres&#34;: {
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;name&#34;: &#34;Leon Ding&#34;
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;wheres&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;name&#34;: &#34;Leon Ding&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -833,9 +846,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table rows remove successfully.&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table rows remove successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -849,7 +860,7 @@ Important
 <p>下面操作会删除 <strong>users</strong> 命名空间，这意味着 <strong>users</strong> 命名空间中存储的数据记录都会被删除，类似于关系数据库 SQL 中的 <code>DROP TABLE ...</code> 语句，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE  http://192.168.31.221:2668/tables/users <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.31.221:2668/tables/users&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: 43CmqMY6r7jndrjUC7cxyJ1SV&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -865,9 +876,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table deleted successfully.&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;table deleted successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -896,9 +905,9 @@ Important
 <p>创建一条名为 <strong>142857</strong> 的 Record 命名空间，并设置所需存储的数据记录值。例如一张帖子的抽象，操作示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT http://192.168.31.221:2668/records/142857 <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.101.252:2668/records/142857&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: dw8PDCPRQcrIVIekL4UheS9ra&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;record&#34;: {
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;title&#34;: &#34;Hello UrnaDB: My First Post&#34;,
@@ -911,6 +920,22 @@ Important
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    },
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;ttl&#34;: 3600
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+  <button
+    class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+    title="Copy code"
+  >
+    <div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4"></div>
+    <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
+  </button>
+</div>
+</div>
+<p>上面命令执行成功之后 HTTP 会响应返回 JSON 格式的内容如下：</p>
+<div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record created successfully&#34;</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -946,19 +971,18 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record queried successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;record&#34;</span>: {
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;category&#34;</span>: <span style="color:#e6db74">&#34;tech&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;content&#34;</span>: <span style="color:#e6db74">&#34;This is a forum post stored inside UrnaDB.\n\n&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;published&#34;</span>: <span style="color:#66d9ef">true</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;tags&#34;</span>: [
-</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;nosql&#34;</span>,
-</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#34;database&#34;</span>,
-</span></span><span style="display:flex;"><span>            ],
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Hello UrnaDB: My First Post&#34;</span>,
-</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;views&#34;</span>: <span style="color:#ae81ff">123</span>
-</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;category&#34;</span>: <span style="color:#e6db74">&#34;tech&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;content&#34;</span>: <span style="color:#e6db74">&#34;This is a forum post stored inside UrnaDB.\n\n&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;published&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;tags&#34;</span>: [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;nosql&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;database&#34;</span>
+</span></span><span style="display:flex;"><span>        ],
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;title&#34;</span>: <span style="color:#e6db74">&#34;Hello UrnaDB: My First Post&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;views&#34;</span>: <span style="color:#ae81ff">123</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
@@ -973,8 +997,8 @@ Important
 <p>对已存在的 <strong>142857</strong> 数据记录查询某个 <code>column</code> 操作，类似于关系数据库 SQL 中的 <code>SELECT column FROM ...</code> 语句，例如搜索查询操作示例：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST http://192.168.31.221:2668/records/142857 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: dw8PDCPRQcrIVIekL4UheS9ra&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/records/142857&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;column&#34;: &#34;tags&#34;
@@ -992,12 +1016,14 @@ Important
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;column&#34;</span>: [
-</span></span><span style="display:flex;"><span>      [<span style="color:#e6db74">&#34;nosql&#34;</span>, <span style="color:#e6db74">&#34;database&#34;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;search completed successfully&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: [
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;nosql&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#34;database&#34;</span>
+</span></span><span style="display:flex;"><span>        ]
 </span></span><span style="display:flex;"><span>    ]
-</span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1011,8 +1037,8 @@ Important
 <p>对已经存在的 <strong>142857</strong> 记录执行删除操作，这个对应着关系数据库 SQL 中的 <code>DROP TABLE ...</code> 语句，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE  http://192.168.31.221:2668/records/142857 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: dw8PDCPRQcrIVIekL4UheS9ra&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.101.252:2668/records/142857&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1027,9 +1053,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record deleted successfully.&#34;</span>
-</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record deleted successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1051,10 +1075,12 @@ Important
 <p>在 Variant 命名空间中，具体的数据类型由首次写入的值决定，并在后续操作中保持一致，例如创建一个名为 <strong>views</strong> 的 Variant 命名空间，它的值是整数 Integer 基础数据类型，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT http://192.168.31.221:2668/variants/views <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FWxQak2rdxWnw45AlGn7R955t&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.101.252:2668/variants/views&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{&#34;variant&#34;: 0 }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;variant&#34;: 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1069,6 +1095,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;variant created successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;variant&#34;</span>: <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>    }
@@ -1092,10 +1119,12 @@ Important
 <p>当 <strong>views</strong> 创建并初始化成功后，即可对其数值执行类似 Redis 中的 INCR 自增操作，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST http://192.168.31.221:2668/variants/views <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FWxQak2rdxWnw45AlGn7R955t&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/variants/views&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{&#34;delta&#34;: 1 }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;delta&#34;: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1110,6 +1139,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;variant incremented successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;variant&#34;</span>: <span style="color:#ae81ff">1</span>
 </span></span><span style="display:flex;"><span>    }
@@ -1133,8 +1163,8 @@ Important
 <p>获取名为 <strong>views</strong> 的命名空间中的值，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET http://192.168.31.221:2668/variants/views <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FWxQak2rdxWnw45AlGn7R955t&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET <span style="color:#e6db74">&#34;http://192.168.101.252:2668/variants/views&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1149,6 +1179,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;variant queried successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;variant&#34;</span>: <span style="color:#ae81ff">1</span>
 </span></span><span style="display:flex;"><span>    }
@@ -1181,10 +1212,12 @@ Important
 <p>在 Lock 命名空间中创建一个名为 <strong>orders</strong> 的分布式租期锁，锁的名称通常对应需要保护的资源标识符，这样可以通过锁名直接关联到具体的业务资源。通过 <strong>orders</strong> 这个锁名，可以方便地查询锁的当前状态、持有者信息以及剩余租期时间，实现对订单相关操作的分布式同步控制，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT http://192.168.101.252:2668/locks/orders -v <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FUCHLQlqEK3kZ5HfKt6fhgRF1&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.101.252:2668/locks/orders&#34;</span> -v <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{&#34;ttl&#34;: 30 }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;ttl&#34;: 30
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1199,8 +1232,9 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;lock created successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;token&#34;</span>: <span style="color:#e6db74">&#34;01KAXPB8D4MNMG731BBZ8MAV28&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;token&#34;</span>: <span style="color:#e6db74">&#34;01KBCNZY9C5XM8YDT835SHW4GN&#34;</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
@@ -1215,10 +1249,12 @@ Important
 <p>当上锁成功后客户端可以安全地执行资源相关的业务操作，在有效租期内，客户端对资源的独占访问是受保护的。但在实际业务场景中客户端的操作时间可能超出预期的锁租期，为了防止锁自动过期导致其他客户端意外获取锁，当客户端需要延长持锁时间时，应主动对锁进行续租操作，确保在业务完成前始终保持对资源的独占控制，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PATCH http://192.168.101.252:2668/locks/orders  <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FUCHLQlqEK3kZ5HfKt6fhgRF1&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PATCH <span style="color:#e6db74">&#34;http://192.168.101.252:2668/locks/orders&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{ &#34;token&#34;: &#34;01KAXPB8D4MNMG731BBZ8MAV28&#34; }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;token&#34;: &#34;01KAXPB8D4MNMG731BBZ8MAV28&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
@@ -1233,8 +1269,9 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;lease acquired successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
-</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;token&#34;</span>: <span style="color:#e6db74">&#34;01KAXQH79VG3JPT4DJFV74EG97&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;token&#34;</span>: <span style="color:#e6db74">&#34;01KBCP1V7GF9CF27PCJDEAT961&#34;</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
@@ -1249,11 +1286,11 @@ Important
 <p>客户端对持有的锁进行提前释放和解锁，解锁时同样需要带有锁对应的 Token 凭证，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE http://192.168.101.252:2668/locks/orders  <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: FUCHLQlqEK3kZ5HfKt6fhgRF1&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.101.252:2668/locks/orders&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;token&#34;: &#34;01KAXQH79VG3JPT4DJFV74EG97&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;token&#34;: &#34;01KBCP1V7GF9CF27PCJDEAT961&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  }&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1269,7 +1306,7 @@ Important
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;deleted lock successfully.&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;lock deleted successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
