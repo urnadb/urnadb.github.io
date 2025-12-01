@@ -35,7 +35,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status 和 message 、data 字段，其中 status 字段是一个枚举类型，值可以 success | error 其中一种，客户端可以根据此字段判断事物操作是否执行成功；message 的值为给人类阅读的消息，data 字段的值是一个 JSON Object 对象，可以是 JSON 对象也可以是一个数组类型。">
-  <meta itemprop="wordCount" content="1160">
+  <meta itemprop="wordCount" content="1169">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API 交互">
   <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
@@ -1357,10 +1357,10 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
     <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>除了基础的命名空间数据操作接口之外，UrnaDB 还提供方便指标监控 HTTP API 接口，客户端可以通过此接口来获取服务端健康状态数据信息。</p></div>
   </div>
 </div>
-<p>使用 <strong>GET</strong> 类型的 HTTP 请求发送至 UrnaDB 的 HTTP API 根端点，即可返回具体的指标监控 JSON 数据信息：</p>
+<p>使用 <strong>GET</strong> 类型的 HTTP 请求发送至 UrnaDB 的 <code>https://.../health</code> 端点 API，即可返回具体的指标监控 JSON 数据信息：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET <span style="color:#e6db74">&#34;http://192.168.101.252:2668/&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET <span style="color:#e6db74">&#34;http://192.168.101.252:2668/health&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
@@ -1376,15 +1376,19 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;key_count&#34;</span>: <span style="color:#ae81ff">1</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;gc_state&#34;</span>: <span style="color:#ae81ff">0</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;disk_free&#34;</span>: <span style="color:#e6db74">&#34;28.09GB&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;disk_used&#34;</span>: <span style="color:#e6db74">&#34;84.62GB&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;disk_total&#34;</span>: <span style="color:#e6db74">&#34;112.71GB&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;mem_free&#34;</span>: <span style="color:#e6db74">&#34;1.50GB&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;mem_total&#34;</span>: <span style="color:#e6db74">&#34;8.00GB&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;disk_percent&#34;</span>: <span style="color:#e6db74">&#34;75.08%&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;space_total&#34;</span>: <span style="color:#e6db74">&#34;0.00GB&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;server is healthy&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;key_count&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;gc_state&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;disk_free&#34;</span>: <span style="color:#e6db74">&#34;27.44GB&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;disk_used&#34;</span>: <span style="color:#e6db74">&#34;85.27GB&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;disk_total&#34;</span>: <span style="color:#e6db74">&#34;112.71GB&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mem_free&#34;</span>: <span style="color:#e6db74">&#34;1.95GB&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mem_total&#34;</span>: <span style="color:#e6db74">&#34;8.00GB&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;disk_percent&#34;</span>: <span style="color:#e6db74">&#34;75.65%&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;space_total&#34;</span>: <span style="color:#e6db74">&#34;0.00GB&#34;</span>
+</span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
