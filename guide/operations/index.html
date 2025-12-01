@@ -35,7 +35,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status 和 message 、data 字段，其中 status 字段是一个枚举类型，值可以 success | error 其中一种，客户端可以根据此字段判断事物操作是否执行成功；message 的值为给人类阅读的消息，data 字段的值是一个 JSON Object 对象，可以是 JSON 对象也可以是一个数组类型。">
-  <meta itemprop="wordCount" content="1169">
+  <meta itemprop="wordCount" content="1205">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API 交互">
   <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
@@ -1392,6 +1392,62 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
   </button>
 </div>
 </div>
+<table>
+  <thead>
+      <tr>
+          <th>Key</th>
+          <th>Value</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>key_count</td>
+          <td>1</td>
+          <td>当前数据库中存储的键数量</td>
+      </tr>
+      <tr>
+          <td>gc_state</td>
+          <td>0</td>
+          <td>垃圾回收状态：0 表示初始状态，1 表示正在执行 ，2 表示空闲状态</td>
+      </tr>
+      <tr>
+          <td>disk_free</td>
+          <td>27.44GB</td>
+          <td>磁盘剩余空间</td>
+      </tr>
+      <tr>
+          <td>disk_used</td>
+          <td>85.27GB</td>
+          <td>已使用磁盘空间</td>
+      </tr>
+      <tr>
+          <td>disk_total</td>
+          <td>112.71GB</td>
+          <td>磁盘总容量</td>
+      </tr>
+      <tr>
+          <td>mem_free</td>
+          <td>1.95GB</td>
+          <td>系统可用内存</td>
+      </tr>
+      <tr>
+          <td>mem_total</td>
+          <td>8.00GB</td>
+          <td>系统总内存</td>
+      </tr>
+      <tr>
+          <td>disk_percent</td>
+          <td>75.65%</td>
+          <td>磁盘使用百分比</td>
+      </tr>
+      <tr>
+          <td>space_total</td>
+          <td>0.00GB</td>
+          <td>数据库记录存储总量，逻辑空间不包含 inode 占用</td>
+      </tr>
+  </tbody>
+</table>
 <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-amber-200 hx-bg-amber-100 hx-text-amber-900 dark:hx-border-amber-200/30 dark:hx-bg-amber-900/30 dark:hx-text-amber-200">
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>Warning</p>
 
