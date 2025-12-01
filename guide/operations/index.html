@@ -35,7 +35,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status 和 message 、data 字段，其中 status 字段是一个枚举类型，值可以 success | error 其中一种，客户端可以根据此字段判断事物操作是否执行成功；message 的值为给人类阅读的消息，data 字段的值是一个 JSON Object 对象，可以是 JSON 对象也可以是一个数组类型。">
-  <meta itemprop="wordCount" content="1205">
+  <meta itemprop="wordCount" content="1214">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API 交互">
   <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
@@ -1391,6 +1391,13 @@ PQL 协议统一返回的数据格式为 JSON 格式，包括 3 个字段 status
     <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
   </button>
 </div>
+</div>
+<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
+
+  <div class="hx-w-full hx-min-w-0 hx-leading-7">
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>尽量避免频繁调用 health 端点，health 的数据获取涉及到从用户态切换到内核态的系统调用操作，相关的 health 指标信息 JSON 值对应作用说明如下：</p></div>
+  </div>
 </div>
 <table>
   <thead>
