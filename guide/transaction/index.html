@@ -9,26 +9,35 @@
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="16x16" />
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href="/images/wiredb-org.png" sizes="180x180" />
-<link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>原子事物 – UrnaDB Document</title>
-  <meta name="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 Oracle、SQLServer、MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 Oracle、SQLServer、MySQL、PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
+<link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>事物设计 – UrnaDB Document</title>
+  <meta name="description" content=" Tip
+事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
 
-<meta property="og:title" content="原子事物" />
-<meta property="og:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 Oracle、SQLServer、MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 Oracle、SQLServer、MySQL、PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" />
+<meta property="og:title" content="事物设计" />
+<meta property="og:description" content="
+  Tip
+
+  
+    事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
+  
+
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/guide/transaction/" /><meta property="article:section" content="guide" />
 
 
 
-  <meta itemprop="name" content="原子事物">
-  <meta itemprop="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 Oracle、SQLServer、MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 Oracle、SQLServer、MySQL、PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
-  <meta itemprop="wordCount" content="29">
+  <meta itemprop="name" content="事物设计">
+  <meta itemprop="description" content="Tip
+事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
+  <meta itemprop="wordCount" content="116">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="原子事物">
-  <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 Oracle、SQLServer、MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 Oracle、SQLServer、MySQL、PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
+  <meta name="twitter:title" content="事物设计">
+  <meta name="twitter:description" content="Tip
+事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
 
     <link href="/css/compiled/main.css" rel="stylesheet" />
 
@@ -219,8 +228,16 @@
       sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
     href="/guide/transaction/"
     
-  >原子事物
+  >事物设计
     </a>
+  
+    <ul class='hx-flex hx-flex-col hx-gap-1 hx-relative before:hx-absolute before:hx-inset-y-1 before:hx-w-px before:hx-bg-gray-200 before:hx-content-[""] dark:before:hx-bg-neutral-800 ltr:hx-pl-3 ltr:before:hx-left-0 rtl:hx-pr-3 rtl:before:hx-right-0 ltr:hx-ml-3 rtl:hx-mr-3'><li>
+              <a
+                href="#-%e5%b7%ae%e5%bc%82%e6%80%a7%e5%af%b9%e6%af%94"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >🆚 差异性对比</a>
+            </li>
+          </ul>
   
               
             </li><li class="hx-flex hx-flex-col "><a
@@ -372,7 +389,7 @@
       sidebar-active-item hx-bg-primary-100 hx-font-semibold hx-text-primary-800 contrast-more:hx-border contrast-more:hx-border-primary-500 dark:hx-bg-primary-400/10 dark:hx-text-primary-600 contrast-more:dark:hx-border-primary-500"
     href="/guide/transaction/"
     
-  >原子事物
+  >事物设计
     </a>
               
             </li><li class="hx-flex hx-flex-col "><a
@@ -461,8 +478,12 @@
 </div></div></aside>
     
 <nav class="hextra-toc hx-order-last hx-hidden hx-w-64 hx-shrink-0 xl:hx-block print:hx-hidden hx-px-4" aria-label="table of contents">
-    <div class="hextra-scrollbar hx-sticky hx-top-16 hx-overflow-y-auto hx-pr-4 hx-pt-6 hx-text-sm [hyphens:auto] hx-max-h-[calc(100vh-var(--navbar-height)-env(safe-area-inset-bottom))] ltr:hx--mr-4 rtl:hx--ml-4">
-      <div class=" hx-sticky hx-bottom-0 hx-flex hx-flex-col hx-items-start hx-gap-2 hx-pb-8 dark:hx-border-neutral-800 contrast-more:hx-border-t contrast-more:hx-border-neutral-400 contrast-more:hx-shadow-none contrast-more:dark:hx-border-neutral-400">
+    <div class="hextra-scrollbar hx-sticky hx-top-16 hx-overflow-y-auto hx-pr-4 hx-pt-6 hx-text-sm [hyphens:auto] hx-max-h-[calc(100vh-var(--navbar-height)-env(safe-area-inset-bottom))] ltr:hx--mr-4 rtl:hx--ml-4"><p class="hx-mb-4 hx-font-semibold hx-tracking-tight">On this page</p><ul>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#-%e5%b7%ae%e5%bc%82%e6%80%a7%e5%af%b9%e6%af%94">🆚 差异性对比
+        </a>
+      </li></ul>
+      <div class="hx-mt-8 hx-border-t hx-bg-white hx-pt-8 hx-shadow-[0_-12px_16px_white] dark:hx-bg-dark dark:hx-shadow-[0_-12px_16px_#111] hx-sticky hx-bottom-0 hx-flex hx-flex-col hx-items-start hx-gap-2 hx-pb-8 dark:hx-border-neutral-800 contrast-more:hx-border-t contrast-more:hx-border-neutral-400 contrast-more:hx-shadow-none contrast-more:dark:hx-border-neutral-400">
         <button aria-hidden="true" id="backToTop" onClick="scrollUp();" class="hx-transition-all hx-duration-75 hx-opacity-0 hx-text-xs hx-font-medium hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-100 contrast-more:hx-text-gray-800 contrast-more:dark:hx-text-gray-50">
           <span>Scroll to top</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="hx-inline ltr:hx-ml-1 rtl:hx-mr-1 hx-h-3.5 hx-w-3.5 hx-border hx-rounded-full hx-border-gray-500 hover:hx-border-gray-900 dark:hx-border-gray-400 dark:hover:hx-border-gray-100 contrast-more:hx-border-gray-800 contrast-more:dark:hx-border-gray-50">
@@ -480,13 +501,83 @@
   <div class="hx-mt-1.5 hx-flex hx-items-center hx-gap-1 hx-overflow-hidden hx-text-sm hx-text-gray-500 dark:hx-text-gray-400 contrast-more:hx-text-current">
         <div class="hx-whitespace-nowrap hx-transition-colors hx-min-w-[24px] hx-overflow-hidden hx-text-ellipsis hover:hx-text-gray-900 dark:hover:hx-text-gray-100">
           <a href="/guide/">使用指南</a>
-        </div><svg class="hx-w-3.5 hx-shrink-0 rtl:-hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg><div class="hx-whitespace-nowrap hx-transition-colors hx-font-medium hx-text-gray-700 contrast-more:hx-font-bold contrast-more:hx-text-current dark:hx-text-gray-100 contrast-more:dark:hx-text-current">原子事物</div>
+        </div><svg class="hx-w-3.5 hx-shrink-0 rtl:-hx-rotate-180" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg><div class="hx-whitespace-nowrap hx-transition-colors hx-font-medium hx-text-gray-700 contrast-more:hx-font-bold contrast-more:hx-text-current dark:hx-text-gray-100 contrast-more:dark:hx-text-current">事物设计</div>
   </div>
 
         <div class="content">
-          <h1>原子事物</h1>
-          <p>事务 <strong>Transaction</strong> 是数据库系统中的基础机制，<strong>Transaction</strong> 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 <span style="color:red"><strong>ACID</strong></span> 四个核心特性，<strong>ACID</strong> 的缩写缩写源自于：原子性 <span style="color:red"><strong>A</strong></span>tomicity、一致性 <span style="color:red"><strong>C</strong></span>onsistency、隔离性 <span style="color:red"><strong>I</strong></span>solation 和持久性 <span style="color:red"><strong>D</strong></span>urability；有了 <strong>ACID</strong> 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。</p>
-<p>目前工业级主流数据库产品 Oracle、SQLServer、MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 <strong>Transaction</strong> 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 Oracle、SQLServer、MySQL、PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。</p>
+          <h1>事物设计</h1>
+          <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Tip</p>
+
+  <div class="hx-w-full hx-min-w-0 hx-leading-7">
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>事务 <strong>Transaction</strong> 是数据库系统中的基础机制，<strong>Transaction</strong> 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事物必须具备的 <span style="color:red"><strong>ACID</strong></span> 四个核心特性，<strong>ACID</strong> 的缩写缩写源自于：原子性 <span style="color:red"><strong>A</strong></span>tomicity、一致性 <span style="color:red"><strong>C</strong></span>onsistency、隔离性 <span style="color:red"><strong>I</strong></span>solation 和持久性 <span style="color:red"><strong>D</strong></span>urability；有了 <strong>ACID</strong> 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。</p></div>
+  </div>
+</div>
+<p>目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 <strong>Transaction</strong> 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。</p>
+<p>传统关系数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。</p>
+<p>传统关系型 SQL 数据库在技术实现层面同样存在较高门槛，其核心组件如 SQL 解析器、查询优化器和执行引擎的设计与实现复杂度极高，不仅需要长期的工程投入，还伴随着持续的维护成本，这种复杂性需要博士生级别的多学科知识，对于小规模团队或独立开发者而言，通常是不现实的选择。</p>
+<h2>🆚 差异性对比<span class="hx-absolute -hx-mt-20" id="-差异性对比"></span>
+    <a href="#-%e5%b7%ae%e5%bc%82%e6%80%a7%e5%af%b9%e6%af%94" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><table>
+  <thead>
+      <tr>
+          <th>维度</th>
+          <th>SQL 数据库</th>
+          <th>UrnaDB</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>SQL 注入</td>
+          <td>⚠️ 高风险</td>
+          <td>✅ 无风险</td>
+      </tr>
+      <tr>
+          <td>性能可预测</td>
+          <td>❌ 不可预测</td>
+          <td>✅ 可预测</td>
+      </tr>
+      <tr>
+          <td>查询优化</td>
+          <td>⚠️ 复杂</td>
+          <td>✅ 无需优化，一级索引和二级索引</td>
+      </tr>
+      <tr>
+          <td>事务隔离</td>
+          <td>⚠️ 4 种级别，复杂</td>
+          <td>✅ MVCC 简单，基于版本的冲突检测</td>
+      </tr>
+      <tr>
+          <td>解析开销</td>
+          <td>⚠️ 10-70ms</td>
+          <td>✅ 0.3ms，简单的 JSON 解析器</td>
+      </tr>
+      <tr>
+          <td>锁竞争</td>
+          <td>⚠️ 严重</td>
+          <td>✅ MVCC 无锁读，可 2PL 锁升级</td>
+      </tr>
+      <tr>
+          <td>Schema 变更</td>
+          <td>⚠️ 锁表</td>
+          <td>✅ 无 Schema，动态修改 Schema 结构</td>
+      </tr>
+      <tr>
+          <td>维护成本</td>
+          <td>⚠️ 需要 DBA</td>
+          <td>✅ 低维护，一个人就能胜任</td>
+      </tr>
+      <tr>
+          <td>扩展性</td>
+          <td>⚠️ 困难</td>
+          <td>✅ 简单，按需通过配置启用插件功能</td>
+      </tr>
+      <tr>
+          <td>学习曲线</td>
+          <td>⚠️ 陡峭</td>
+          <td>✅ 平缓，导入对应语言 SDK 即可使用</td>
+      </tr>
+  </tbody>
+</table>
 
         </div>
         <div class="hx-mt-16"></div>
