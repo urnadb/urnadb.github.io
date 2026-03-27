@@ -10,34 +10,34 @@
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href="/images/wiredb-org.png" sizes="180x180" />
 <link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>事务设计 – UrnaDB Document</title>
-  <meta name="description" content=" Tip
-事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
+  <meta name="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
+关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
+Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
 
 <meta property="og:title" content="事务设计" />
-<meta property="og:description" content="
-  Tip
+<meta property="og:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
+关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 
-  
-    事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-  
-
-目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。" />
+  Important" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://localhost:1313/guide/transaction/" /><meta property="article:section" content="guide" />
 
 
 
   <meta itemprop="name" content="事务设计">
-  <meta itemprop="description" content="Tip
-事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
-  <meta itemprop="wordCount" content="135">
+  <meta itemprop="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
+关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
+Important">
+  <meta itemprop="wordCount" content="151">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
-  <meta name="twitter:description" content="Tip
-事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability；有了 ACID 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。
-目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。">
+  <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
+目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
+关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
+Important">
 
     <link href="/css/compiled/main.css" rel="stylesheet" />
 
@@ -526,19 +526,27 @@
 
         <div class="content">
           <h1>事务设计</h1>
-          <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
-  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Tip</p>
+          <p>事务 <strong>Transaction</strong> 是数据库系统中的基础机制，<strong>Transaction</strong> 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 <span style="color:red"><strong>ACID</strong></span> 四个核心特性，ACID 的缩写缩写源自于：原子性 <span style="color:red"><strong>A</strong></span>tomicity、一致性 <span style="color:red"><strong>C</strong></span>onsistency、隔离性 <span style="color:red"><strong>I</strong></span>solation 和持久性 <span style="color:red"><strong>D</strong></span>urability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。</p>
+<p>目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 <strong>SQL</strong> 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。</p>
+<p>关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。</p>
+<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
 
   <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>事务 <strong>Transaction</strong> 是数据库系统中的基础机制，<strong>Transaction</strong> 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 <span style="color:red"><strong>ACID</strong></span> 四个核心特性，<strong>ACID</strong> 的缩写缩写源自于：原子性 <span style="color:red"><strong>A</strong></span>tomicity、一致性 <span style="color:red"><strong>C</strong></span>onsistency、隔离性 <span style="color:red"><strong>I</strong></span>solation 和持久性 <span style="color:red"><strong>D</strong></span>urability；有了 <strong>ACID</strong> 的约束确保了一组数据库操作即使在故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有其他异常状态的产生。</p></div>
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>关系型 SQL 数据库在技术实现层面同样存在较高门槛，其核心组件如 SQL 解析器、查询优化器和执行引擎的设计与实现复杂度极高，不仅需要长期的工程投入，还伴随着持续的维护成本，这种复杂性需要多年经验和多学科知识才能胜任，对于小规模团队或独立开发者而言，通常是不现实的选择。</p></div>
   </div>
 </div>
-<p>目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 <strong>Transaction</strong> 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、MongoDB、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。</p>
-<p>传统关系数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。</p>
-<p>传统关系型 SQL 数据库在技术实现层面同样存在较高门槛，其核心组件如 SQL 解析器、查询优化器和执行引擎的设计与实现复杂度极高，不仅需要长期的工程投入，还伴随着持续的维护成本，这种复杂性需要博士生级别的多学科知识才能胜任，对于小规模团队或独立开发者而言，通常是不现实的选择。</p>
 <h2>🛡️ 安全性<span class="hx-absolute -hx-mt-20" id="-安全性"></span>
     <a href="#-%e5%ae%89%e5%85%a8%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h2>⏱️ 高性能<span class="hx-absolute -hx-mt-20" id="-高性能"></span>
     <a href="#-%e9%ab%98%e6%80%a7%e8%83%bd" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>首先需要明确这里的 <strong>“高性能”</strong> 并非泛指 UrnaDB 的整体性能，而是聚焦于其在高并发场景下处理海量事务时的吞吐能力。数据库事务的处理性能不仅受磁盘 I/O、CPU 和 RAM 等硬件因素影响，还与系统内部设计密切相关。本节将忽略外部环境因素，重点从 UrnaDB 的数据结构设计以及事务锁机制出发，探讨其对 UrnaDB 事务吞吐能力的影响。</p>
+<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Tip</p>
+
+  <div class="hx-w-full hx-min-w-0 hx-leading-7">
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>UrnaDB 中的批量原子事务操作是针对的 Table 命名空间中的数据记录所设计。在之前的 <a href="http://localhost:1313/guide/operations/#-table-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4" target="_blank" rel="noopener">API 交互</a>文档中有提到 Table 命名空间在初始化完成之后会自动分配一个全局锁。在默认单个原子事务请求下，UrnaDB 内部的事务处理器会使用本次事务请求中所涉及到的 Table 对应锁进行并发数据竞争的保护，多个 Table 命名空间在并发事务请求下是互不影响的，但在涉及到多个 Table 命名空间数据记录进行交集运算的事务时就不适用了。</p></div>
+  </div>
+</div>
+<img src="/images/txns-race.png" alt="architecture" width="100%" />
 <h2>🆚 差异性<span class="hx-absolute -hx-mt-20" id="-差异性"></span>
     <a href="#-%e5%b7%ae%e5%bc%82%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><table>
   <thead>
@@ -562,7 +570,7 @@
       <tr>
           <td>查询优化</td>
           <td>⚠️ 复杂</td>
-          <td>✅ 无需优化，一级索引和可配置二级索引</td>
+          <td>✅ 无需优化，一级索引和可选择二级索引</td>
       </tr>
       <tr>
           <td>事务隔离</td>
@@ -572,7 +580,7 @@
       <tr>
           <td>解析开销</td>
           <td>⚠️ 10-70ms</td>
-          <td>✅ 0.3ms，简单的 JSON 解析器</td>
+          <td>✅ ≈ 0.3ms，简单的 JSON 解析器</td>
       </tr>
       <tr>
           <td>锁竞争</td>
@@ -587,7 +595,7 @@
       <tr>
           <td>维护成本</td>
           <td>⚠️ 需要 DBA 团队</td>
-          <td>✅ 低维护，一个人就能胜任</td>
+          <td>✅ 低维护量，一个人就能胜任</td>
       </tr>
       <tr>
           <td>扩展性</td>
