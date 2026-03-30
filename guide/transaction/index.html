@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="249">
+  <meta itemprop="wordCount" content="251">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -552,10 +552,10 @@ Important">
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
 
   <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>Redis 在运行期间支持通过 SDK 或 API 动态加载并执行用户自定义的 Lua 脚本，这依赖于内置 Lua VM 提供脚本执行能力。该设计在增强可编程性的同时，也对执行环境的隔离性与资源控制提出了更高要求。如果缺乏严格的沙箱机制与执行限制，可能引发诸如沙箱逃逸、长时间阻塞、如死循环，以及内存滥用等问题。</p></div>
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>Redis 在运行期间支持通过 SDK 或 API 动态加载并执行用户自定义的 Lua 脚本，这依赖于内置 Lua VM 提供脚本执行能力。该设计在增强可编程性的同时，也对执行环境的隔离性与资源控制提出了更高的要求，如果宿主机（这里是指 Redis 数据库）缺乏严格的沙箱机制与执行限制，可能引发诸如沙箱逃逸、长时间阻塞、如死循环，以及内存滥用等问题。</p></div>
   </div>
 </div>
-<p>下文将通过具体示例分析这些潜在的安全风险，恶意代码实例如下：</p>
+<p>下文将通过具体示例分析这些潜在的安全风险，恶意代码示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#75715e">-- 死循环攻击</span>
