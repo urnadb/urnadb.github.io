@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=59967&amp;path=livereload" data-no-instant defer></script>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
@@ -13,7 +13,7 @@
   <meta name="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
-Important" /><link rel="canonical" href="http://localhost:59967/guide/transaction/" itemprop="url" />
+Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
 
 <meta property="og:title" content="事务设计" />
 <meta property="og:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -23,7 +23,7 @@ Important" /><link rel="canonical" href="http://localhost:59967/guide/transactio
 
   Important" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:59967/guide/transaction/" /><meta property="article:section" content="guide" />
+<meta property="og:url" content="http://localhost:1313/guide/transaction/" /><meta property="article:section" content="guide" />
 
 
 
@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:59967/guide/transactio
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="195">
+  <meta itemprop="wordCount" content="205">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -547,8 +547,14 @@ Important">
   </div>
 </div>
 <h2>🛡️ 安全性<span class="hx-absolute -hx-mt-20" id="-安全性"></span>
-    <a href="#-%e5%ae%89%e5%85%a8%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>传统 SQL 关系型数据库在生产环境中，既面<strong>安全性</strong>面的风险，其中 SQL 注入作为一种典型的应用层安全漏洞，长期以来是开发者需要重点防范的问题之一，想要避免避免这种问题，使用者需要在应用层使用 <code>Prepared Statement</code> 来预处理 SQL 语句。</p>
-<p>同样 NoSQL 数据库也存在这类问题，例如 Redis 通过内置 Lua 虚拟机（VM）来实现事务逻辑或扩展能力如脚本执行、存储过程等，虽然增强了灵活性，但也带来了额外的复杂性和潜在的安全风险。</p>
+    <a href="#-%e5%ae%89%e5%85%a8%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>传统 SQL 关系型数据库在生产环境中，既面<strong>安全</strong>层面的风险，其中 SQL 注入作为一种典型的应用层安全漏洞，长期以来是开发者需要重点防范的问题之一，想要避免避免这种问题，使用者需要在应用层使用 <code>Prepared Statement</code> 来预处理 SQL 语句。</p>
+<p>同样 NoSQL 数据库也存在<strong>安全</strong>层面的风险，例如 Redis 通过内置 Lua 虚拟机（VM）来实现事务逻辑或扩展能力如脚本执行、存储过程等，虽然增强了灵活性，但也带来了额外的复杂性和潜在的安全风险。</p>
+<ul>
+<li>内置的 VM 执行环境可能引入沙箱逃逸或资源滥用问题，如死循环、内存耗尽。</li>
+<li>脚本执行增加了系统的不可预测性，影响稳定性和调试难度。</li>
+<li>引入额外语言 Lua、JavaScript 意味着需要额外的运行时和安全隔离机制。</li>
+</ul>
+<p>因此这类基于 VM 的扩展机制在提升能力的同时，也增加了系统设计复杂度和潜在的安全隐患，需要谨慎权衡。</p>
 <h2>⏱️ 高性能<span class="hx-absolute -hx-mt-20" id="-高性能"></span>
     <a href="#-%e9%ab%98%e6%80%a7%e8%83%bd" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>首先需要明确这里的 <strong>“高性能”</strong> 并非泛指 UrnaDB 的整体性能，而是聚焦于其在高并发场景下处理海量事务时的吞吐能力。数据库事务的处理性能不仅受磁盘 I/O、CPU 和 RAM 等硬件因素影响，还与系统内部设计密切相关。本节将忽略外部环境因素，重点从 UrnaDB 的数据结构设计以及事务锁机制出发，探讨其对 UrnaDB 事务吞吐能力的影响。</p>
 <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
