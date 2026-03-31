@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="253">
+  <meta itemprop="wordCount" content="266">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -592,12 +592,26 @@ Important">
   </button>
 </div>
 </div>
-<ul>
-<li>内置的 VM 执行环境可能引入沙箱逃逸或资源滥用问题，如死循环、内存耗尽。</li>
-<li>脚本执行增加了系统的不可预测性，影响稳定性和调试难度。</li>
-<li>引入额外语言 Lua、JavaScript 意味着需要额外的运行时和安全隔离机制。</li>
-</ul>
-<p>因此这类基于 VM 的扩展机制在提升能力的同时，也增加了系统设计复杂度和潜在的安全隐患，需要谨慎权衡。</p>
+<p>上述任意代码，如果被恶意用户提交到 Redis 的 Lua VM 中执行，可能会导致系统行为不可预测，从而影响整体稳定性与调试难度，例如脚本中的异常逻辑如死循环或大量内存分配可能耗尽数据库资源，使 Lua VM 长时间被占用，进而阻塞其他脚本或相关操作的正常执行。</p>
+<div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ae81ff">lua-time-limit 5000  </span> <span style="color:#75715e"># 默认 5 秒</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+  <button
+    class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+    title="Copy code"
+  >
+    <div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4"></div>
+    <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
+  </button>
+</div>
+</div>
+<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
+
+  <div class="hx-w-full hx-min-w-0 hx-leading-7">
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>Redis 并未彻底解决 Lua 脚本带来的执行隔离问题，而是通过单线程模型、执行时间限制和受控 API，将风险从 “系统级崩溃” 降低为可观测、可干预的阻塞问题。</p></div>
+  </div>
+</div>
 <h2>⏱️ 高性能<span class="hx-absolute -hx-mt-20" id="-高性能"></span>
     <a href="#-%e9%ab%98%e6%80%a7%e8%83%bd" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><p>首先需要明确这里的 <strong>“高性能”</strong> 并非泛指 UrnaDB 的整体性能，而是聚焦于其在高并发场景下处理海量事务时的吞吐能力。数据库事务的处理性能不仅受磁盘 I/O、CPU 和 RAM 等硬件因素影响，还与系统内部设计密切相关。本节将忽略外部环境因素，重点从 UrnaDB 的数据结构设计以及事务锁机制出发，探讨其对 UrnaDB 事务吞吐能力的影响。</p>
 <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
