@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="251">
+  <meta itemprop="wordCount" content="253">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -243,6 +243,12 @@ Important">
                 href="#-%e9%ab%98%e6%80%a7%e8%83%bd"
                 class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
               >⏱️ 高性能</a>
+            </li>
+          <li>
+              <a
+                href="#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1"
+                class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
+              >⚛️ 原子事务</a>
             </li>
           <li>
               <a
@@ -501,6 +507,10 @@ Important">
         </a>
       </li>
       <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1">⚛️ 原子事务
+        </a>
+      </li>
+      <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
         <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#-%e5%b7%ae%e5%bc%82%e6%80%a7">🆚 差异性
         </a>
       </li></ul>
@@ -598,7 +608,8 @@ Important">
   </div>
 </div>
 <img src="/images/txns-race.png" alt="transaction" width="100%" />
-<h2>🆚 差异性<span class="hx-absolute -hx-mt-20" id="-差异性"></span>
+<h2>⚛️ 原子事务<span class="hx-absolute -hx-mt-20" id="-原子事务"></span>
+    <a href="#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h2>🆚 差异性<span class="hx-absolute -hx-mt-20" id="-差异性"></span>
     <a href="#-%e5%b7%ae%e5%bc%82%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><table>
   <thead>
       <tr>
