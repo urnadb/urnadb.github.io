@@ -1901,7 +1901,7 @@
   &lt;p class=&#34;hx-flex hx-items-center hx-font-medium&#34;&gt;&lt;svg height=16px class=&#34;hx-inline-block hx-align-middle hx-mr-2&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; fill=&#34;none&#34; viewBox=&#34;0 0 24 24&#34; stroke-width=&#34;2&#34; stroke=&#34;currentColor&#34; aria-hidden=&#34;true&#34;&gt;&lt;path stroke-linecap=&#34;round&#34; stroke-linejoin=&#34;round&#34; d=&#34;M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z&#34;/&gt;&lt;/svg&gt;Warning&lt;/p&gt;
 
   &lt;div class=&#34;hx-w-full hx-min-w-0 hx-leading-7&#34;&gt;
-    &lt;div class=&#34;hx-mt-6 hx-leading-7 first:hx-mt-0&#34;&gt;&lt;p&gt;上面案例最终结果是数据不一致！钱凭空消失了！按正常的业务逻辑 SQL 事务设计，事务计算是要符合 ACID 原则的，一组数据要么成功要么失败，不会出现其他状态。Redis Lua 只适合 &lt;strong&gt;幂等操作&lt;/strong&gt; 或 &lt;strong&gt;可以容忍部分失败&lt;/strong&gt; 的场景，不适合金融转账这种严格要求 ACID 的场景。&lt;/p&gt;&lt;/div&gt;
+    &lt;div class=&#34;hx-mt-6 hx-leading-7 first:hx-mt-0&#34;&gt;&lt;p&gt;上面案例最终结果是数据不一致！A 账户的钱凭空消失了，B 账户却没有增加金额！按正常的业务逻辑 SQL 事务设计，事务计算是要符合 ACID 原则的，一组数据要么成功要么失败，不会出现其他状态。Redis Lua 只适合 &lt;strong&gt;可以容忍部分失败&lt;/strong&gt; 的场景，不适合金融转账这种严格要求 ACID 的场景。&lt;/p&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 &lt;h2&gt;⏱️ 高性能&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-高性能&#34;&gt;&lt;/span&gt;
@@ -1915,81 +1915,7 @@
 &lt;/div&gt;
 &lt;img src=&#34;http://localhost:1313/images/txns-race.png&#34; alt=&#34;transaction&#34; width=&#34;100%&#34; /&gt;
 &lt;h2&gt;⚛️ 原子事务&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-原子事务&#34;&gt;&lt;/span&gt;
-    &lt;a href=&#34;#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;下面是 UrnaDB 的完整时间线：&lt;/p&gt;
-&lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
-
-&lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1. NewTransaction()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 创建 .txn 文件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 写入文件头（magic bytes）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 分配全局唯一事务 ID
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   └─ 返回 Transaction 对象
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2. AtomicBatch(callback)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   └─ 保存回调函数到 t.execute（不执行）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3. Commit()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 调用 callback 执行业务逻辑
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ Begin: 读取数据快照 → 写入 .txn 文件（WAL）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 业务逻辑: 修改数据（内存中）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ Save: 保存修改结果到 state.writes（内存中）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 新 Key 处理
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 为新增的 key 写入 tombstone 到 .txn
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 记录到 t.newKeys 列表
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 版本冲突检测
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 遍历 state.writes 中的每个 key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 比较快照的 MVCC 版本号与当前版本
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 如果版本不一致 → 设置 t.rollback = false，返回冲突错误
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ CommitTxns: 批量写入磁盘
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 一次性原子写入所有修改到 .db 文件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 更新内存索引（inode）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 递增 MVCC 版本号
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   └─ 删除 .txn 文件（原子操作）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      └─ 删除成功 = 事务提交成功
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;4. Rollback()（Commit 失败时调用）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 判断 t.rollback 标志
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 如果 t.rollback == true（执行失败/写入失败）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  ├─ RollbackTxns: 恢复数据
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  │  ├─ 删除新增的 key（写入 tombstone）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  │  ├─ 恢复旧版本数据（从 t.snapshots）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  │  └─ 更新索引，恢复 MVCC 版本号
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │  └─ 删除 .txn 文件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 如果 t.rollback == false（版本冲突）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │     └─ 直接删除 .txn 文件（无需恢复数据）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   └─ 返回错误信息
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5. 系统崩溃恢复（OpenFS 启动时）
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 扫描 txns/ 目录
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 发现残留的 .txn 文件
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 读取 .txn 文件内容
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 解析快照数据
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ├─ 执行回滚操作
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  ├─ 恢复快照中的旧版本数据
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │  └─ 删除可能已写入的新数据
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   │
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   └─ 删除 .txn 文件&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
-  &lt;button
-    class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
-    title=&#34;Copy code&#34;
-  &gt;
-    &lt;div class=&#34;copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-    &lt;div class=&#34;success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4&#34;&gt;&lt;/div&gt;
-  &lt;/button&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h2&gt;🆚 产品差异性&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-产品差异性&#34;&gt;&lt;/span&gt;
+    &lt;a href=&#34;#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h2&gt;🆚 产品差异性&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-产品差异性&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#-%e4%ba%a7%e5%93%81%e5%b7%ae%e5%bc%82%e6%80%a7&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
@@ -2063,7 +1989,7 @@
       &lt;tr&gt;
           &lt;td&gt;ACID 支持&lt;/td&gt;
           &lt;td&gt;✅ 完整支持&lt;/td&gt;
-          &lt;td&gt;❌ 不支持，Lua 只是串行执行，存在被攻击风险&lt;/td&gt;
+          &lt;td&gt;❌ 不支持，Lua 串行执行，有被攻击风险&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;原子性&lt;/td&gt;
