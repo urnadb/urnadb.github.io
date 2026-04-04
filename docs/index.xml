@@ -2004,7 +2004,7 @@
       &lt;tr&gt;
           &lt;td&gt;ACID 支持&lt;/td&gt;
           &lt;td&gt;✅ 完整支持&lt;/td&gt;
-          &lt;td&gt;❌ 不支持，Lua 串行，有被攻击风险&lt;/td&gt;
+          &lt;td&gt;❌ 不支持，Lua 事务有被攻击风险&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;原子性&lt;/td&gt;
@@ -2044,7 +2044,7 @@
       &lt;tr&gt;
           &lt;td&gt;跨多 Key 事务&lt;/td&gt;
           &lt;td&gt;✅ 支持&lt;/td&gt;
-          &lt;td&gt;⚠️ Lua 脚本，事务异常会导致数据不一致&lt;/td&gt;
+          &lt;td&gt;⚠️ Lua 脚本异常会导致数据不一致&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;事务实现&lt;/td&gt;
@@ -2063,7 +2063,7 @@
       &lt;/tr&gt;
       &lt;tr&gt;
           &lt;td&gt;垃圾回收&lt;/td&gt;
-          &lt;td&gt;✅ 自动 GC&lt;/td&gt;
+          &lt;td&gt;✅ 自动磁盘 GC&lt;/td&gt;
           &lt;td&gt;⚠️ 内存淘汰策略&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;

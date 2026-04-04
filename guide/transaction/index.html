@@ -754,7 +754,7 @@ Important">
       <tr>
           <td>ACID 支持</td>
           <td>✅ 完整支持</td>
-          <td>❌ 不支持，Lua 串行，有被攻击风险</td>
+          <td>❌ 不支持，Lua 事务有被攻击风险</td>
       </tr>
       <tr>
           <td>原子性</td>
@@ -794,7 +794,7 @@ Important">
       <tr>
           <td>跨多 Key 事务</td>
           <td>✅ 支持</td>
-          <td>⚠️ Lua 脚本，事务异常会导致数据不一致</td>
+          <td>⚠️ Lua 脚本异常会导致数据不一致</td>
       </tr>
       <tr>
           <td>事务实现</td>
@@ -813,7 +813,7 @@ Important">
       </tr>
       <tr>
           <td>垃圾回收</td>
-          <td>✅ 自动 GC</td>
+          <td>✅ 自动磁盘 GC</td>
           <td>⚠️ 内存淘汰策略</td>
       </tr>
       <tr>
