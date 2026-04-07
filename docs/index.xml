@@ -1904,7 +1904,7 @@
     &lt;div class=&#34;hx-mt-6 hx-leading-7 first:hx-mt-0&#34;&gt;&lt;p&gt;上面案例最终结果是数据不一致，A 账户的钱凭空消失了，B 账户却没有增加金额！按正常的业务逻辑 SQL 事务设计，事务计算是要符合 ACID 原则的，一组数据操作要么成功要么失败，不会出现其他状态；Redis Lua 只适合 &lt;strong&gt;可以容忍部分失败&lt;/strong&gt; 的场景，不适合金融转账这种严格要求 ACID 的场景。&lt;/p&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;下面是列出一组 Redis 🆚 UrnaDB 事务对比数据：&lt;/p&gt;
+&lt;p&gt;下面是一组 UrnaDB 与 Redis 的事务完璧性，数据对比表：&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
@@ -1928,6 +1928,12 @@
           &lt;td&gt;✅ 安全&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
+          &lt;td&gt;Lua&lt;/td&gt;
+          &lt;td&gt;❌ 否&lt;/td&gt;
+          &lt;td&gt;❌ 危险&lt;/td&gt;
+          &lt;td&gt;✅ 安全&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
           &lt;td&gt;INCR&lt;/td&gt;
           &lt;td&gt;❌ 否&lt;/td&gt;
           &lt;td&gt;❌ 危险&lt;/td&gt;
@@ -1939,14 +1945,9 @@
           &lt;td&gt;❌ 危险&lt;/td&gt;
           &lt;td&gt;✅ 安全&lt;/td&gt;
       &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;转账&lt;/td&gt;
-          &lt;td&gt;❌ 否&lt;/td&gt;
-          &lt;td&gt;❌ 危险&lt;/td&gt;
-          &lt;td&gt;✅ 安全&lt;/td&gt;
-      &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;p&gt;通过上述数据对比可以看出，UrnaDB 在事务设计上优于 Redis 的设计。&lt;/p&gt;
 &lt;h2&gt;⏱️ 高性能&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-高性能&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#-%e9%ab%98%e6%80%a7%e8%83%bd&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;首先需要明确这里的 &lt;strong&gt;“高性能”&lt;/strong&gt; 并非泛指 UrnaDB 的整体性能，而是聚焦于其在高并发场景下处理海量事务时的吞吐能力。数据库事务的处理性能不仅受磁盘 I/O、CPU 和 RAM 等硬件因素影响，还与数据库系统本身内部的设计密切相关，本节将忽略外部环境因素，重点从 UrnaDB 的数据内结构设计以及事务管理器、和锁机制出发，探讨其对 UrnaDB 事务吞吐能力的影响。&lt;/p&gt;
 &lt;div class=&#34;hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200&#34;&gt;
