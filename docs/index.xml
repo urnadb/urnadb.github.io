@@ -2120,7 +2120,7 @@
           &lt;td&gt;⚠️ 需 Redlock 算法&lt;/td&gt;
       &lt;/tr&gt;
       &lt;tr&gt;
-          &lt;td&gt;金融交易&lt;/td&gt;
+          &lt;td&gt;强一致性&lt;/td&gt;
           &lt;td&gt;✅ ACID 保证&lt;/td&gt;
           &lt;td&gt;❌ 不适合&lt;/td&gt;
       &lt;/tr&gt;
