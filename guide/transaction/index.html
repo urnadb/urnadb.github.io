@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=55903&amp;path=livereload" data-no-instant defer></script>
+<html lang="en"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex, nofollow" />
@@ -13,7 +13,7 @@
   <meta name="description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
-Important" /><link rel="canonical" href="http://localhost:55903/guide/transaction/" itemprop="url" />
+Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction/" itemprop="url" />
 
 <meta property="og:title" content="事务设计" />
 <meta property="og:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -23,7 +23,7 @@ Important" /><link rel="canonical" href="http://localhost:55903/guide/transactio
 
   Important" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://localhost:55903/guide/transaction/" /><meta property="article:section" content="guide" />
+<meta property="og:url" content="http://localhost:1313/guide/transaction/" /><meta property="article:section" content="guide" />
 
 
 
@@ -725,7 +725,7 @@ Important">
     <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>在该数据结构与锁管理策略下，即使 Table 命名空间规模达到百万级，系统仍具备良好的并发扩展能力，由于事务仅对访问的 Table 加锁，而活跃事务数通常远小于 Table 空间规模，因此锁竞争概率较低，从而提升整体吞吐性能。但是在当事务涉及多个 Table 命名空间的交集运算时，基于 Table 的细粒度锁机制不再具备设计之初的并发特性和高事务吞吐量。</p></div>
   </div>
 </div>
-<p>但在涉及到多个 Key 批量事务处理时候上述的设计就不适用了，跨多 Key 事务在执行过程中，需要同时获取并持有多个 Key 命名空间对应的锁，从而扩大锁作用域，锁范围的扩展会提高锁冲突概率，降低并发执行效率，并最终影响系统整体吞吐性能，多事务锁冲突示意图如下：</p>
+<p>但在涉及到多个 Table 批量事务处理时候上述的设计就不适用了，跨多 Table 事务在执行过程中，需要同时获取并持有多个 Table 命名空间对应的锁，从而扩大锁作用域，锁范围的扩展会提高锁冲突概率，降低并发执行效率，并最终影响系统整体吞吐性能，多事务锁冲突示意图如下：</p>
 <img src="/images/bacth-txns.png" alt="transaction" width="100%" />
 <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-amber-200 hx-bg-amber-100 hx-text-amber-900 dark:hx-border-amber-200/30 dark:hx-bg-amber-900/30 dark:hx-text-amber-200">
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>Warning</p>
