@@ -112,7 +112,7 @@
 &lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
 
 &lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;var&lt;/span&gt; count &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sdk.&lt;span style=&#34;color:#a6e22e&#34;&gt;tables&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;users&amp;#34;&lt;/span&gt;).&lt;span style=&#34;color:#a6e22e&#34;&gt;remove&lt;/span&gt;(r &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r.&lt;span style=&#34;color:#a6e22e&#34;&gt;where&lt;/span&gt;(w &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; w.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;(4))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    r.where(w &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; w.&lt;span style=&#34;color:#a6e22e&#34;&gt;id&lt;/span&gt;(4))
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&#34;hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0&#34;&gt;
   &lt;button
     class=&#34;hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50&#34;
@@ -1984,6 +1984,7 @@
     &lt;div class=&#34;hx-mt-6 hx-leading-7 first:hx-mt-0&#34;&gt;&lt;p&gt;并发冲突的本质在于事务之间访问数据集的重叠程度，由此可以推导出数据库系统的并发性能在很大程度上取决于事务访问数据集的重叠程度，而减少访问范围能够有效降低冲突概率。基于这一原则，主流数据库系统在并发控制策略上进行了大量优化，例如 MySQL 和 PostgreSQL 采用 MVCC 以降低读写之间的互斥，而 Redis 则通过 Compare-And-Swap 乐观并发机制减少锁竞争，从而提升整体吞吐量。&lt;/p&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
+&lt;p&gt;UrnaDB 的批量事务操作也参考了传统 SQL 数据库的 MVCC 的设计，在默认批量事务请求处理下也是使用的多个数据版本快照的方式供事务执行运算操作。多个并行处理的事务之间操作的数据都是 Snapshot 副本，每个事务的运算都是基于 Snapshot 快照副本，从而实现了无事务锁干预，提升整体吞吐量，多个事务 MVCC 处理示意图如下：&lt;/p&gt;
 &lt;h2&gt;⚛️ 原子事务&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-原子事务&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;h2&gt;🆚 产品差异性&lt;span class=&#34;hx-absolute -hx-mt-20&#34; id=&#34;-产品差异性&#34;&gt;&lt;/span&gt;
     &lt;a href=&#34;#-%e4%ba%a7%e5%93%81%e5%b7%ae%e5%bc%82%e6%80%a7&#34; class=&#34;subheading-anchor&#34; aria-label=&#34;Permalink for this section&#34;&gt;&lt;/a&gt;&lt;/h2&gt;&lt;table&gt;
