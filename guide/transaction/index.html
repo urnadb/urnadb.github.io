@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="558">
+  <meta itemprop="wordCount" content="563">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -736,6 +736,13 @@ Important">
 </div>
 <p>UrnaDB 的批量事务操作也参考了传统 SQL 数据库的 MVCC 的设计，在默认批量事务请求处理下也是使用的多个数据版本快照的方式供事务执行运算操作。多个并行处理的事务之间操作的数据都是 Snapshot 副本，每个事务的运算都是基于 Snapshot 快照副本，从而实现了无事务锁干预来提升数据库整体事务吞吐量，多个事务 MVCC 处理示意图如下：</p>
 <img src="/images/multi-txns-race.png" alt="transaction" width="100%" />
+<div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
+  <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
+
+  <div class="hx-w-full hx-min-w-0 hx-leading-7">
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>UrnaDB 的事务处理器基于 MVCC 管理并发事务访问的数据版本，对于同时执行的多个事务，当其访问的数据存在重叠时，系统会在提交阶段根据事务的提交顺序进行冲突检测，并决定是合并变更还是回滚冲突事务。</p></div>
+  </div>
+</div>
 <h2>⚛️ 原子事务<span class="hx-absolute -hx-mt-20" id="-原子事务"></span>
     <a href="#-%e5%8e%9f%e5%ad%90%e4%ba%8b%e5%8a%a1" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><h2>🆚 产品差异性<span class="hx-absolute -hx-mt-20" id="-产品差异性"></span>
     <a href="#-%e4%ba%a7%e5%93%81%e5%b7%ae%e5%bc%82%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><table>
