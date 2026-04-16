@@ -32,7 +32,7 @@ Important" /><link rel="canonical" href="http://localhost:1313/guide/transaction
 目前工业级主流数据库产品 MySQL、PostgreSQL、Redis、MongoDB、DynamoDB 都有对 Transaction 特性的支持，但具体实现细节有着天壤之别。同样按照数据库类型分类：关系型数据库如 PostgreSQL 的事务实现通常基于 SQL 标准并完整支持 ACID 特性；而 NoSQL 数据库如 Redis、DynamoDB 的事务机制则没有统一标准，通常根据系统设计在原子性、隔离性等方面提供不同级别的支持，部分系统甚至仅支持单操作原子性。
 关系型数据库的 SQL 语言表达能力强大，SQL 可以通过复杂的 JOIN、子查询、聚合函数、窗口函数等表达复杂的业务逻辑，一条 SQL 语句就能完成多表关联、分组统计、排序分页等操作。使用者就需要花费大量的时间来学习和掌握使用 SQL 语法包括复杂的子查询、窗口函数、索引原理、执行计划分析、事务隔离级别、锁机制、MVCC 原理、查询优化技巧、性能调优、高可用架构等。
 Important">
-  <meta itemprop="wordCount" content="668">
+  <meta itemprop="wordCount" content="752">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="事务设计">
   <meta name="twitter:description" content="事务 Transaction 是数据库系统中的基础机制，Transaction 用于保证数据操作时的正确性与可靠性而提出的一组核心约束。事务必须具备的 ACID 四个核心特性，ACID 的缩写缩写源自于：原子性 Atomicity、一致性 Consistency、隔离性 Isolation 和持久性 Durability。ACID 约束确保了一组数据库操作，即使在运算故障时也能保持数据的一致性和可靠性，实现数据从一个合法状态向另一个合法状态的转换，使其执行运算过程中没有异常状态的产生。
@@ -804,6 +804,46 @@ Important">
     <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p><strong>Mutations</strong> 通过对多个原子操作进行封装与组合，对外提供批量原子事务的抽象，使多个操作在逻辑上表现为一个整体事务。</p></div>
   </div>
 </div>
+<p>使用 UrnaDB 批量原子事务时，客户端只需向 <code>https://.../txns</code> 端点发送 HTTP 协议的 POST 请求，服务器端收到事务请求之后即可执行批量事务操作，需要注意的是事务中涉及的 Table 命名空间必须已提前创建。下面是使用 <code>curl</code> 发送批量原子事务请求的例子：</p>
+<div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
+
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/txns&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;mutations&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;name&#34;: &#34;users&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;operation&#34;: &#34;INSERT&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;values&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;id&#34;: 1,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;name&#34;: &#34;Leon Ding&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;age&#34;: 25
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;name&#34;: &#34;users&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;operation&#34;: &#34;UPDATE&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;where&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;id&#34;: 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            },
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            &#34;values&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                &#34;age&#34;: 26
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ],
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;serialization&#34;: false
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+  <button
+    class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
+    title="Copy code"
+  >
+    <div class="copy-icon group-[.copied]/copybtn:hx-hidden hx-pointer-events-none hx-h-4 hx-w-4"></div>
+    <div class="success-icon hx-hidden group-[.copied]/copybtn:hx-block hx-pointer-events-none hx-h-4 hx-w-4"></div>
+  </button>
+</div>
+</div>
+<p>上述请求会对名为 <strong>users</strong> 的 Table 命名空间执行批量原子操作，类似于关系数据库中的 <code>INSERT</code> 和 <code>UPDATE</code> 组合事务语句；需要注意的是 <strong>serialization</strong> 字段的值，如果不传入 <strong>serialization</strong> 字段，UrnaDB 事务处理器默认会以值为 <strong>false</strong> 进行处理。这里的 <strong>serialization</strong> 对应前文中提到的</p>
 <h2>🆚 产品差异性<span class="hx-absolute -hx-mt-20" id="-产品差异性"></span>
     <a href="#-%e4%ba%a7%e5%93%81%e5%b7%ae%e5%bc%82%e6%80%a7" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><table>
   <thead>
