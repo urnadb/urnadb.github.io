@@ -2054,7 +2054,7 @@
     &lt;div class=&#34;hx-mt-6 hx-leading-7 first:hx-mt-0&#34;&gt;&lt;p&gt;&lt;strong&gt;Mutations&lt;/strong&gt; 通过对多个原子操作进行封装与组合，对外提供批量原子事务的抽象，使多个操作在逻辑上表现为一个整体事务。&lt;/p&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
-&lt;p&gt;使用 UrnaDB 批量原子事务时，客户端只需向 &lt;code&gt;https://.../txns&lt;/code&gt; 端点发送 HTTP 协议的 POST 请求，服务器端收到事务请求之后即可执行批量事务操作，需要注意的是事务中涉及的 Table 命名空间必须已提前创建；下面是使用 &lt;code&gt;curl&lt;/code&gt; 发送批量原子事务请求的例子：&lt;/p&gt;
+&lt;p&gt;使用 UrnaDB 批量原子事务时，客户端只需向 &lt;code&gt;https://.../txns&lt;/code&gt; 端点发送 HTTP 协议的 POST 请求，服务器端收到事务请求之后即可执行批量事务操作，需要注意的是事务中涉及的 Table 命名空间必须已提前创建；下面是使用 HTTP 客户端软件发送批量原子事务请求的示例：&lt;/p&gt;
 &lt;div class=&#34;hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code&#34;&gt;
 
 &lt;div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -X POST &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;http://192.168.101.252:2668/txns&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;\
