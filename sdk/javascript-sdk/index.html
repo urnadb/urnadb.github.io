@@ -26,7 +26,7 @@
   <meta itemprop="name" content="JavaScript SDK">
   <meta itemprop="description" content="每个编程语言版本的 SDK 都基于对应语言的语言特性进行实现，JavaScript 版本的 SDK 同样如此，完全基于 ES6 标准编写，充分利用 JavaScript 灵活的函数式编程能力。因此 UrnaDB JavaScript SDK 在 API 设计上采用 Lambda 函数式风格，将函数作为一等公民，使 API 更加简洁、灵活，并能够充分发挥 JavaScript 的语言特性，为熟悉 JavaScript 和函数式编程的开发者提供自然、友好的编程体验。
 🚀 快速开始 Tip">
-  <meta itemprop="wordCount" content="123">
+  <meta itemprop="wordCount" content="149">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="JavaScript SDK">
   <meta name="twitter:description" content="每个编程语言版本的 SDK 都基于对应语言的语言特性进行实现，JavaScript 版本的 SDK 同样如此，完全基于 ES6 标准编写，充分利用 JavaScript 灵活的函数式编程能力。因此 UrnaDB JavaScript SDK 在 API 设计上采用 Lambda 函数式风格，将函数作为一等公民，使 API 更加简洁、灵活，并能够充分发挥 JavaScript 的语言特性，为熟悉 JavaScript 和函数式编程的开发者提供自然、友好的编程体验。
@@ -545,14 +545,26 @@
 <p>获取 UrnaDB 数据库连接实例对象后，开发者可以通过 db 连接对象访问 UrnaDB 数据库中不同命名空间所提供的数据模型，并通过对应的 API 对数据库进行操作。下面以查询当前 UrnaDB 数据库运行时状态数据为例，代码示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#a6e22e">test</span>(<span style="color:#e6db74">&#34;should query database system info&#34;</span>, <span style="color:#66d9ef">async</span> () =&gt; {
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#75715e">// 打开连接远程数据库服务器
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">db</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">UrnaDB</span>.<span style="color:#a6e22e">OpenConnection</span>({
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">host</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;192.168.3.20&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">port</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">2668</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">token</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#34;connection-secret-token&#34;</span>,
+</span></span><span style="display:flex;"><span>});
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">info</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">systemInfo</span>();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 获取当前的数据库服务器运行状态
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">info</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">db</span>.<span style="color:#a6e22e">systemInfo</span>();
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#a6e22e">result</span>.<span style="color:#a6e22e">status</span>, <span style="color:#e6db74">&#34;success&#34;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">assert</span>.<span style="color:#a6e22e">equal</span>(<span style="color:#a6e22e">result</span>.<span style="color:#a6e22e">data</span>);
-</span></span><span style="display:flex;"><span>});</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 远程数据库服务器指标
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`键数量: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">keyCount</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`GC 状态: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">gcState</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> (0=初始, 1=执行中, 2=空闲)`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`磁盘剩余: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">diskFreeSpace</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`磁盘已用: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">diskUsedSpace</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`磁盘总量: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">diskTotalSpace</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`磁盘使用率: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">diskUsagePercent</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`内存可用: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">memoryFree</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`内存总量: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">memoryTotal</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`数据库存储总量: </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">info</span>.<span style="color:#a6e22e">totalSpaceUsed</span><span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>);</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
     title="Copy code"
