@@ -10,13 +10,13 @@
 <link rel="icon" href="/images/wiredb-org.png" type="image/png" sizes="32x32" />
 <link rel="apple-touch-icon" href="/images/wiredb-org.png" sizes="180x180" />
 <link fetchpriority="low" href="/site.webmanifest" rel="manifest" /><title>API 交互 – UrnaDB Document</title>
-  <meta name="description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
+  <meta name="description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Document 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应格式如下：" /><link rel="canonical" href="http://localhost:1313/guide/operations/" itemprop="url" />
 
 <meta property="og:title" content="API 交互" />
-<meta property="og:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
+<meta property="og:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Document 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
 
   Important
 
@@ -31,14 +31,14 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
 
 
   <meta itemprop="name" content="API 交互">
-  <meta itemprop="description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
+  <meta itemprop="description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Document 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应格式如下：">
-  <meta itemprop="wordCount" content="1224">
+  <meta itemprop="wordCount" content="1202">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="API 交互">
-  <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
+  <meta name="twitter:description" content="UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Document 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。
 Important
 客户端与 UrnaDB 服务端之间的数据交互通过 PQL 协议，PQL（Patch Query Language）是一种基于 HTTP &#43; JSON 的数据操作与查询协议，为客户端与服务器之间的结构化数据交换提供了统一、简单且可扩展的接口，任何能够发起 HTTP 请求的软件都可以作为 PQL 客户端；以下内容将介绍如何使用 PQL API 与服务器进行数据交换示例。
 PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应格式如下：">
@@ -235,9 +235,9 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
             </li>
           <li>
               <a
-                href="#-record-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4"
+                href="#-document-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4"
                 class="hx-flex hx-rounded hx-px-2 hx-py-1.5 hx-text-sm hx-transition-colors [word-break:break-word] hx-cursor-pointer [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none] contrast-more:hx-border hx-gap-2 before:hx-opacity-25 before:hx-content-['#'] hx-text-gray-500 hover:hx-bg-gray-100 hover:hx-text-gray-900 dark:hx-text-neutral-400 dark:hover:hx-bg-primary-100/5 dark:hover:hx-text-gray-50 contrast-more:hx-text-gray-900 contrast-more:dark:hx-text-gray-50 contrast-more:hx-border-transparent contrast-more:hover:hx-border-gray-900 contrast-more:dark:hover:hx-border-gray-50"
-              >📂 Record 命名空间</a>
+              >📂 Document 命名空间</a>
             </li>
           <li>
               <a
@@ -512,7 +512,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
         </a>
       </li>
       <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
-        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#-record-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4">📂 Record 命名空间
+        <a class="hx-font-semibold hx-inline-block hx-text-gray-500 hover:hx-text-gray-900 dark:hx-text-gray-400 dark:hover:hx-text-gray-300 contrast-more:hx-text-gray-900 contrast-more:hx-underline contrast-more:dark:hx-text-gray-50 hx-w-full hx-break-words" href="#-document-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4">📂 Document 命名空间
         </a>
       </li>
       <li class="hx-my-2 hx-scroll-my-6 hx-scroll-py-6">
@@ -550,7 +550,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
 
         <div class="content">
           <h1>API 交互</h1>
-          <p>UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Record 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。</p>
+          <p>UrnaDB 内部提供了多种数据结构抽象，例如 Table 、Document 、 Variant 、Lock 类型，这些数据类型对应着常见的业务代码所需使用的数据结构。后续的文档统一称之为 NameSpace 命名空间，同一命名空间中存储都是同一类型的数据模型的数据，了解不同命名空间的数据模型及其特性，有助于开发者根据业务需求选择最合适的数据模型，从而高效实现上层业务功能。</p>
 <div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-indigo-200 hx-bg-indigo-100 hx-text-indigo-900 dark:hx-border-indigo-200/30 dark:hx-bg-indigo-900/30 dark:hx-text-indigo-200">
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
 
@@ -962,22 +962,22 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
     <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>Table 是一组多个对象记录组成集合，同一个 Table 命名空间随着不断插入新的数据，会导致 Table 越来越大并且有锁的开销，多条记录共享一把 Table 锁有性能损失，所以不建议在单个 Table 命名空间中存储数据较多条数据记录。</p></div>
   </div>
 </div>
-<h2>📂 Record 命名空间<span class="hx-absolute -hx-mt-20" id="-record-命名空间"></span>
-    <a href="#-record-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
+<h2>📂 Document 命名空间<span class="hx-absolute -hx-mt-20" id="-document-命名空间"></span>
+    <a href="#-document-%e5%91%bd%e5%90%8d%e7%a9%ba%e9%97%b4" class="subheading-anchor" aria-label="Permalink for this section"></a></h2><div class="hx-overflow-x-auto hx-mt-6 hx-flex hx-flex-col hx-rounded-lg hx-border hx-py-4 hx-px-4 contrast-more:hx-border-current contrast-more:dark:hx-border-current hx-border-green-200 hx-bg-green-100 hx-text-green-900 dark:hx-border-green-200/30 dark:hx-bg-green-900/30 dark:hx-text-green-200">
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>Tip</p>
 
   <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p><strong>Record</strong> 命名空间的结构类似 MongoDB 中的 Document 结构，Record 通常直接映射编程语言中的 class 的一条记录，OOP 面向对象编程中的对象可以直接映射为 Record 记录。在高并发场景下 Record 一条记录对应一把锁，有着事物处理性能高的优势。Record 一段创建就不能改了，适应场景就是更新不频繁的数据，例如社交论坛系统中帖子功能，一条帖子可以对应一条 Record 记录，如果更新了直接设置一条新的 Record 映射即可。</p></div>
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p><strong>Document</strong> 命名空间用于存储一份 JSON 文档，可以将编程语言中的对象映射为独立的 Document。例如，社交论坛中的一篇帖子可以保存为一份 Document，并通过文档名称访问。</p></div>
   </div>
 </div>
-<p>创建一条名为 <strong>142857</strong> 的 Record 命名空间，并设置所需存储的数据记录值。例如一张帖子的抽象，操作示例如下：</p>
+<p>创建一份名为 <strong>142857</strong> 的 Document，并设置所需存储的数据内容。例如一篇帖子，操作示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.101.252:2668/records/142857&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X PUT <span style="color:#e6db74">&#34;http://192.168.101.252:2668/documents/142857&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;record&#34;: {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;document&#34;: {
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;title&#34;: &#34;Hello UrnaDB: My First Post&#34;,
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;author&#34;: &#34;Leon Ding&#34;,
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      &#34;content&#34;: &#34;This is a forum post stored inside UrnaDB.\n\n&#34;,
@@ -1002,7 +1002,7 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record created successfully&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;document created successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1017,13 +1017,13 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
   <p class="hx-flex hx-items-center hx-font-medium"><svg height=16px class="hx-inline-block hx-align-middle hx-mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Important</p>
 
   <div class="hx-w-full hx-min-w-0 hx-leading-7">
-    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>这个 <strong>142857</strong> 可以看作是一篇文章的 POST ID 编号，业务层只需要提供这个 ID 就可以查询到这条帖子数据，类似于关系数据库中一条记录的唯一主键；同样在创建 Record 记录数据时可以指定 <code>ttl</code> 字段，<code>ttl</code> 的值单位是秒用来设置 Record 的生命周期。</p></div>
+    <div class="hx-mt-6 hx-leading-7 first:hx-mt-0"><p>这个 <strong>142857</strong> 可以看作是一篇文章的 POST ID 编号，业务层只需要提供这个 ID 就可以查询到这份 Document；创建 Document 时可以指定 <code>ttl</code> 字段，单位为秒，用来设置它的生命周期。</p></div>
   </div>
 </div>
-<p>在 Record 命名空间中查询一条名为 <strong>142857</strong> 的数据记录，操作示例如下：</p>
+<p>查询名为 <strong>142857</strong> 的 Document，操作示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET http://192.168.31.221:2668/records/142857 <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X GET http://192.168.31.221:2668/documents/142857 <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: dw8PDCPRQcrIVIekL4UheS9ra&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1034,12 +1034,12 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
   </button>
 </div>
 </div>
-<p>如果执行成功会返回 <strong>142857</strong> 中存储的完整数据记录：</p>
+<p>如果执行成功会返回 <strong>142857</strong> 中存储的完整文档：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record queried successfully&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;document queried successfully&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: {
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;author&#34;</span>: <span style="color:#e6db74">&#34;Leon Ding&#34;</span>,
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;category&#34;</span>: <span style="color:#e6db74">&#34;tech&#34;</span>,
@@ -1062,10 +1062,10 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
   </button>
 </div>
 </div>
-<p>对已存在的 <strong>142857</strong> 数据记录查询某个 <code>column</code> 操作，类似于关系数据库 SQL 中的 <code>SELECT column FROM ...</code> 语句，例如搜索查询操作示例：</p>
+<p>查询已有的 <strong>142857</strong> Document 中的某个 <code>column</code>，类似于关系数据库 SQL 中的 <code>SELECT column FROM ...</code> 语句，示例如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/records/142857&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X POST <span style="color:#e6db74">&#34;http://192.168.101.252:2668/documents/142857&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Content-Type: application/json&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -d <span style="color:#e6db74">&#39;{
@@ -1102,10 +1102,10 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
   </button>
 </div>
 </div>
-<p>对已经存在的 <strong>142857</strong> 记录执行删除操作，这个对应着关系数据库 SQL 中的 <code>DROP TABLE ...</code> 语句，代码如下：</p>
+<p>删除已经存在的 <strong>142857</strong> Document，代码如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
-<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.101.252:2668/document/142857&#34;</span> <span style="color:#ae81ff">\
+<div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -X DELETE <span style="color:#e6db74">&#34;http://192.168.101.252:2668/documents/142857&#34;</span> <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -H <span style="color:#e6db74">&#34;Auth-Token: yv2PH82JXfm2UpScAQK37iJVI&#34;</span></span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
@@ -1116,12 +1116,12 @@ PQL 协议统一返回的数据格式为 JSON 格式，HTTP 请求统一响应�
   </button>
 </div>
 </div>
-<p>如果上面请求执行成功会删除对应的 <strong>142857</strong> 中所存储的数据记录，HTTP 会响应返回 JSON 格式的内容如下：</p>
+<p>如果上面请求执行成功会删除名为 <strong>142857</strong> 的 Document，HTTP 会响应返回 JSON 格式的内容如下：</p>
 <div class="hextra-code-block hx-relative hx-mt-6 first:hx-mt-0 hx-group/code">
 
 <div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;status&#34;</span>: <span style="color:#e6db74">&#34;success&#34;</span>,
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;record deleted successfully&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;message&#34;</span>: <span style="color:#e6db74">&#34;document deleted successfully&#34;</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div></div><div class="hextra-code-copy-btn-container hx-opacity-0 hx-transition group-hover/code:hx-opacity-100 hx-flex hx-gap-1 hx-absolute hx-m-[11px] hx-right-0 hx-top-0">
   <button
     class="hextra-code-copy-btn hx-group/copybtn hx-transition-all active:hx-opacity-50 hx-bg-primary-700/5 hx-border hx-border-black/5 hx-text-gray-600 hover:hx-text-gray-900 hx-rounded-md hx-p-1.5 dark:hx-bg-primary-300/10 dark:hx-border-white/10 dark:hx-text-gray-400 dark:hover:hx-text-gray-50"
